@@ -1,5 +1,13 @@
 plugins {
     id 'java'
+    id 'maven-publish'
+}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
 }
 
 group = 'com.github.TEAM-LOGMATE'
