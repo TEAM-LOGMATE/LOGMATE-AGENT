@@ -38,7 +38,8 @@ public class HttpLogExporter implements LogExporter {
         byte[] input = jsonBody.toString().getBytes(StandardCharsets.UTF_8);
         os.write(input, 0, input.length);
       }
-
+      System.out.println("log-mate log push response code: " + conn.getResponseCode());
+      //conn.connect();
       conn.disconnect();
     } catch (IOException e) {
       throw new RuntimeException(e);
