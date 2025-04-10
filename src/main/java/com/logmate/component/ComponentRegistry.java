@@ -2,7 +2,7 @@ package com.logmate.component;
 
 
 import com.logmate.exporter.LogExporter;
-import com.logmate.exporter.impl.ConsoleLogExporter;
+import com.logmate.exporter.impl.HttpLogExporter;
 import com.logmate.filter.LogFilter;
 import com.logmate.filter.impl.NonLogFilter;
 import java.io.File;
@@ -20,20 +20,22 @@ import com.logmate.watcher.tailer.impl.FileLogTailer;
  */
 public class ComponentRegistry {
 
-  private String filePath;
+  private String logFilePath;
+  private String logPushURL;
   private LogTailer logTailer;
   private LogEventListener logEventListener;
   private LogParser logParser;
   private LogFilter logFilter;
   private LogExporter logExporter;
 
-  public ComponentRegistry(String filePath) {
-    this.filePath = filePath;
+  public ComponentRegistry(String logFilePath, String logPushURL) {
+    this.logFilePath = logFilePath;
+    this.logPushURL = logPushURL;
   }
 
   public LogTailer getLogTailer() {
     if (Objects.isNull(logTailer)) {
-      logTailer = new FileLogTailer(new File(filePath), getLogEventListener());
+      logTailer = new FileLogTailer(new File(logFilePath), getLogEventListener());
       return logTailer;
     }
     return logTailer;
@@ -69,7 +71,7 @@ public class ComponentRegistry {
 
   public LogExporter getLogExporter() {
     if (Objects.isNull(logExporter)) {
-      logExporter = new ConsoleLogExporter();
+      logExporter = new HttpLogExporter(logPushURL);
       return logExporter;
     }
     return logExporter;
