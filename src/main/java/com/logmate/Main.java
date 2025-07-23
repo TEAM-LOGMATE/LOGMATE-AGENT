@@ -1,14 +1,16 @@
 package com.logmate;
 
-import com.logmate.component.ComponentRegistry;
+import com.logmate.config.ConfigInjectionServer;
+import com.logmate.tailer.TailerRunManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main {
+  private static final Logger log = LoggerFactory.getLogger(Main.class);
 
-  public static void main(String[] args) {
-    ComponentRegistry componentRegistry = new ComponentRegistry("sample.log", "http://localhost:8083/logs/spring/abcd");
-    Thread tailerThread = new Thread(componentRegistry.getLogTailer());
-    tailerThread.start();
-    System.out.println("log-mate-library is running");
-    System.out.println("Log tailer started...");
+  public static void main(String[] args) throws Exception {
+    ConfigInjectionServer.start(2373);
+    TailerRunManager.start();
+    log.info("log-mate-watcher is running");
   }
 }
