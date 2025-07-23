@@ -1,6 +1,5 @@
 package com.logmate.parser.impl.spring;
 
-import com.logmate.util.JsonStringEscaper;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import com.logmate.parser.LogParser;
@@ -38,14 +37,14 @@ public class SpringBootLogParser implements LogParser {
       String logger = rawLine.substring(threadEnd + 2 + level.length(), dashIndex).trim();
       String message = rawLine.substring(dashIndex + 3).trim();
 
-      return new SpringBootParsedLogData(true, timestamp, level, thread, logger,  JsonStringEscaper.escape(message));
+      return new SpringBootParsedLogData(true, timestamp, level, thread, logger, message);
     } catch (Exception e) {
       // 파싱 실패 시 null 반환 또는 로그 원본 그대로 객체에 담을 수도 있음
       if (rawLine.isBlank()) {
         return new SpringBootParsedLogData(false, LocalDateTime.now(), "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN");
 
       }
-      return new SpringBootParsedLogData(false, LocalDateTime.now(), "UNKNOWN", "UNKNOWN", "UNKNOWN",  JsonStringEscaper.escape(rawLine));
+      return new SpringBootParsedLogData(false, LocalDateTime.now(), "UNKNOWN", "UNKNOWN", "UNKNOWN", rawLine);
     }
   }
 }

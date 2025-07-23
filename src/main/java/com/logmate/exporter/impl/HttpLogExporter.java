@@ -1,5 +1,6 @@
 package com.logmate.exporter.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.logmate.exporter.LogExporter;
 import com.logmate.parser.ParsedLogData;
 import java.io.IOException;
@@ -25,14 +26,8 @@ public class HttpLogExporter implements LogExporter {
       conn.setDoOutput(true);
       conn.setRequestProperty("Content-Type", "application/json");
 
-      StringBuilder jsonBody = new StringBuilder("[");
-      for (int i = 0; i < logDataList.size(); i++) {
-        jsonBody.append(logDataList.get(i).toString());
-        if(i != logDataList.size() - 1) {
-          jsonBody.append(",");
-        }
-      }
-      jsonBody.append("]");
+      ObjectMapper mapper = new ObjectMapper();
+      String jsonBody = mapper.writeValueAsString(logDataList);
 
       try (OutputStream os = conn.getOutputStream()) {
         byte[] input = jsonBody.toString().getBytes(StandardCharsets.UTF_8);
