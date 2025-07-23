@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 publishing {
     publications {
@@ -18,10 +19,20 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+    implementation 'org.slf4j:slf4j-simple:2.0.7'
 
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.logmate.Main'
+        )
+    }
 }
