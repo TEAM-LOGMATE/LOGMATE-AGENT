@@ -1,4 +1,4 @@
-package com.logmate.watcher.tailer.impl;
+package com.logmate.tailer.impl;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -7,8 +7,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import com.logmate.watcher.listener.LogEventListener;
-import com.logmate.watcher.tailer.LogTailer;
+import com.logmate.listener.LogEventListener;
+import com.logmate.tailer.LogTailer;
 import java.util.StringTokenizer;
 
 
