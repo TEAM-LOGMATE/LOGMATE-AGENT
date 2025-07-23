@@ -1,6 +1,8 @@
-package com.logmate.config;
+package com.logmate.injection.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.logmate.injection.config.WatcherConfig;
+import com.logmate.injection.config.WatcherConfigHolder;
 import com.logmate.tailer.TailerRunManager;
 import com.sun.net.httpserver.HttpServer;
 import java.io.OutputStream;

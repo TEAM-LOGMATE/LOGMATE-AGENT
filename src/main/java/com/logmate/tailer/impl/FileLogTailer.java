@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import com.logmate.listener.LogEventListener;
+import com.logmate.tailer.listener.LogEventListener;
 import com.logmate.tailer.LogTailer;
 import java.util.StringTokenizer;
 

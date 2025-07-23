@@ -1,4 +1,4 @@
-package com.logmate.parser;
+package com.logmate.tailer.parser;
 
 public interface ParsedLogData {
   String getMessage();

@@ -1,17 +1,17 @@
 package com.logmate.component;
 
 
-import com.logmate.config.WatcherConfig;
-import com.logmate.exporter.LogExporter;
-import com.logmate.exporter.impl.HttpLogExporter;
-import com.logmate.filter.LogFilter;
-import com.logmate.filter.impl.NonLogFilter;
+import com.logmate.injection.config.WatcherConfig;
+import com.logmate.tailer.exporter.LogExporter;
+import com.logmate.tailer.exporter.impl.HttpLogExporter;
+import com.logmate.tailer.filter.LogFilter;
+import com.logmate.tailer.filter.impl.NonLogFilter;
 import java.io.File;
 import java.util.Objects;
-import com.logmate.parser.LogParser;
-import com.logmate.parser.impl.spring.SpringBootLogParser;
-import com.logmate.listener.LogEventListener;
-import com.logmate.listener.impl.DefaultLogEventListener;
+import com.logmate.tailer.parser.LogParser;
+import com.logmate.tailer.parser.impl.spring.SpringBootLogParser;
+import com.logmate.tailer.listener.LogEventListener;
+import com.logmate.tailer.listener.impl.DefaultLogEventListener;
 import com.logmate.tailer.LogTailer;
 import com.logmate.tailer.impl.FileLogTailer;
 

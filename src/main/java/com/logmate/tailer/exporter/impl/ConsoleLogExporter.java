@@ -1,8 +1,8 @@
-package com.logmate.exporter.impl;
+package com.logmate.tailer.exporter.impl;
 
-import com.logmate.exporter.LogExporter;
+import com.logmate.tailer.exporter.LogExporter;
 import java.util.List;
-import com.logmate.parser.ParsedLogData;
+import com.logmate.tailer.parser.ParsedLogData;
 
 
 public class ConsoleLogExporter implements LogExporter {

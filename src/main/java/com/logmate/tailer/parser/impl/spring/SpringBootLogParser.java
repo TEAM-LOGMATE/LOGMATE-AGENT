@@ -1,9 +1,9 @@
-package com.logmate.parser.impl.spring;
+package com.logmate.tailer.parser.impl.spring;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import com.logmate.parser.LogParser;
-import com.logmate.parser.ParsedLogData;
+import com.logmate.tailer.parser.LogParser;
+import com.logmate.tailer.parser.ParsedLogData;
 
 
 public class SpringBootLogParser implements LogParser {

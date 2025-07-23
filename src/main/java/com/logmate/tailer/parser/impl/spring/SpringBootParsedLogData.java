@@ -1,8 +1,8 @@
-package com.logmate.parser.impl.spring;
+package com.logmate.tailer.parser.impl.spring;
 
 
 import java.time.LocalDateTime;
-import com.logmate.parser.ParsedLogData;
+import com.logmate.tailer.parser.ParsedLogData;
 
 public class SpringBootParsedLogData implements ParsedLogData {
   private boolean isFormatCorrect;

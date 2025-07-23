@@ -1,4 +1,4 @@
-package com.logmate.config;
+package com.logmate.injection.config;
 
 public class WatcherConfigHolder {
 

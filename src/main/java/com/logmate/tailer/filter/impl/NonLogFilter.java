@@ -1,8 +1,8 @@
-package com.logmate.filter.impl;
+package com.logmate.tailer.filter.impl;
 
 
-import com.logmate.filter.LogFilter;
-import com.logmate.parser.ParsedLogData;
+import com.logmate.tailer.filter.LogFilter;
+import com.logmate.tailer.parser.ParsedLogData;
 
 public class NonLogFilter implements LogFilter {
 

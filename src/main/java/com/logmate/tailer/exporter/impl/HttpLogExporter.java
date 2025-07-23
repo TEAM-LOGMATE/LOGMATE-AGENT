@@ -1,8 +1,8 @@
-package com.logmate.exporter.impl;
+package com.logmate.tailer.exporter.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.logmate.exporter.LogExporter;
-import com.logmate.parser.ParsedLogData;
+import com.logmate.tailer.exporter.LogExporter;
+import com.logmate.tailer.parser.ParsedLogData;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;

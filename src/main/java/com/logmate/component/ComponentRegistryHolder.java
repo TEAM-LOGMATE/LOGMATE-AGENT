@@ -1,6 +1,6 @@
 package com.logmate.component;
 
-import com.logmate.config.WatcherConfigHolder;
+import com.logmate.injection.config.WatcherConfigHolder;
 
 public class ComponentRegistryHolder {
   public static ComponentRegistry componentRegistry = new ComponentRegistry(WatcherConfigHolder.get());

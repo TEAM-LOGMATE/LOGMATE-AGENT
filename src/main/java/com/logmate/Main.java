@@ -1,6 +1,6 @@
 package com.logmate;
 
-import com.logmate.config.ConfigInjectionServer;
+import com.logmate.injection.server.ConfigInjectionServer;
 import com.logmate.tailer.TailerRunManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
