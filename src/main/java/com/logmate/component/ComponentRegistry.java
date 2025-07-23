@@ -1,6 +1,7 @@
 package com.logmate.component;
 
 
+import com.logmate.config.WatcherConfig;
 import com.logmate.exporter.LogExporter;
 import com.logmate.exporter.impl.HttpLogExporter;
 import com.logmate.filter.LogFilter;
@@ -9,10 +10,10 @@ import java.io.File;
 import java.util.Objects;
 import com.logmate.parser.LogParser;
 import com.logmate.parser.impl.spring.SpringBootLogParser;
-import com.logmate.watcher.listener.LogEventListener;
-import com.logmate.watcher.listener.impl.DefaultLogEventListener;
-import com.logmate.watcher.tailer.LogTailer;
-import com.logmate.watcher.tailer.impl.FileLogTailer;
+import com.logmate.listener.LogEventListener;
+import com.logmate.listener.impl.DefaultLogEventListener;
+import com.logmate.tailer.LogTailer;
+import com.logmate.tailer.impl.FileLogTailer;
 
 /**
  * System 에서 사용하는 컴포넌트들을 생성하고, Dependency 를 연결한다.
@@ -28,9 +29,9 @@ public class ComponentRegistry {
   private LogFilter logFilter;
   private LogExporter logExporter;
 
-  public ComponentRegistry(String logFilePath, String logPushURL) {
-    this.logFilePath = logFilePath;
-    this.logPushURL = logPushURL;
+  public ComponentRegistry(WatcherConfig watcherConfig) {
+    this.logFilePath = watcherConfig.getLogFilePath();
+    this.logPushURL = watcherConfig.getLogPushURL();
   }
 
   public LogTailer getLogTailer() {
@@ -71,6 +72,7 @@ public class ComponentRegistry {
 
   public LogExporter getLogExporter() {
     if (Objects.isNull(logExporter)) {
+      //logExporter = new ConsoleLogExporter();
       logExporter = new HttpLogExporter(logPushURL);
       return logExporter;
     }
