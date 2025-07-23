@@ -1,13 +1,13 @@
-package com.logmate.watcher.listener.impl;
+package com.logmate.listener.impl;
 
 
 import com.logmate.exporter.LogExporter;
 import com.logmate.filter.LogFilter;
+import com.logmate.listener.LogEventListener;
 import java.util.ArrayList;
 import java.util.List;
 import com.logmate.parser.LogParser;
 import com.logmate.parser.ParsedLogData;
-import com.logmate.watcher.listener.LogEventListener;
 
 public class DefaultLogEventListener implements LogEventListener {
 
