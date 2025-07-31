@@ -1,8 +1,11 @@
 package com.logmate.injection.config;
 
+
+import com.logmate.injection.config.loader.YamlConfigLoader;
+
 public class WatcherConfigHolder {
 
-  private static WatcherConfig watcherConfig = WatcherConfig.getDefault();
+  private static WatcherConfig watcherConfig = createDefault();
 
   public static WatcherConfig get() {
     return watcherConfig;
@@ -18,14 +21,11 @@ public class WatcherConfigHolder {
   }
 
   private static boolean isValidNewConfig(WatcherConfig watcherConfig) {
-    if (watcherConfig.getLogFilePath().isEmpty()) {
-      return false;
-    }
-
-    if (watcherConfig.getLogPushURL().isEmpty()) {
-      return false;
-    }
 
     return true;
+  }
+
+  private static WatcherConfig createDefault() {
+    return YamlConfigLoader.load("default-config.yml");
   }
 }

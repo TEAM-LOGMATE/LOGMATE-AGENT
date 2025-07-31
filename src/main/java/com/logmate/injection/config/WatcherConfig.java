@@ -1,27 +1,18 @@
 package com.logmate.injection.config;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class WatcherConfig {
 
-  private String logFilePath;
-  private String logPushURL;
-
-  public WatcherConfig() {
-  }
-
-  public static WatcherConfig getDefault() {
-    return new WatcherConfig("sample.log", "http://localhost:8080");
-  }
-
-  public WatcherConfig(String logFilePath, String logPushURL) {
-    this.logFilePath = logFilePath;
-    this.logPushURL = logPushURL;
-  }
-
-  public String getLogFilePath() {
-    return logFilePath;
-  }
-
-  public String getLogPushURL() {
-    return logPushURL;
-  }
+  private AgentConfig agent;
+  private TailerConfig tailer;
+  private ExporterConfig exporter;
+  private ParserConfig parser;
+  private FilterConfig filter;
+  private PullerConfig configPuller;
 }
