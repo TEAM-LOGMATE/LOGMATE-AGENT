@@ -1,16 +1,27 @@
 package com.logmate.component;
 
-import com.logmate.injection.config.WatcherConfigHolder;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.logmate.injection.config.WatcherConfig;
+import com.logmate.tailer.LogTailer;
 
 public class ComponentRegistryHolder {
-  public static ComponentRegistry componentRegistry = new ComponentRegistry(WatcherConfigHolder.get());
 
-  public static ComponentRegistry get() {
-    return componentRegistry;
+  private static Injector injector;
+
+  public static void create(WatcherConfig config) {
+    ComponentRegistryHolder.injector = Guice.createInjector(new ComponentRegistry(config));
   }
 
-  public static void remake() {
-    componentRegistry = new ComponentRegistry(WatcherConfigHolder.get());
+  public static void remake(WatcherConfig config) {
+    ComponentRegistryHolder.injector = Guice.createInjector(new ComponentRegistry(config));
   }
 
+  public static LogTailer getTailer() {
+    return injector.getInstance(LogTailer.class);
+  }
+
+  public static <T> T getInstance(Class<T> clazz) {
+    return injector.getInstance(clazz);
+  }
 }
