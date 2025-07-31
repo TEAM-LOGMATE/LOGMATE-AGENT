@@ -1,7 +1,7 @@
 package com.logmate.tailer;
 
-import com.logmate.component.ComponentRegistry;
 import com.logmate.component.ComponentRegistryHolder;
+import com.logmate.injection.config.WatcherConfigHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,8 +12,8 @@ public class TailerRunManager {
   private static Thread tailerThread;
 
   public static void start() {
-    ComponentRegistry componentRegistry = ComponentRegistryHolder.get();
-    tailerThread = new Thread(componentRegistry.getLogTailer());
+    ComponentRegistryHolder.create(WatcherConfigHolder.get());
+    tailerThread = new Thread(ComponentRegistryHolder.getTailer());
     tailerThread.start();
     log.info("log tailer started...");
   }
@@ -23,9 +23,9 @@ public class TailerRunManager {
     if (tailerThread != null) {
       tailerThread.interrupt();
     }
-    ComponentRegistryHolder.remake();
-    ComponentRegistry componentRegistry = ComponentRegistryHolder.get();
-    tailerThread = new Thread(componentRegistry.getLogTailer());
+
+    ComponentRegistryHolder.remake(WatcherConfigHolder.get());
+    tailerThread = new Thread(ComponentRegistryHolder.getTailer());
     tailerThread.start();
     log.info("log tailer restarted...");
   }

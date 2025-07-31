@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.logmate.tailer.parser.LogParser;
 import com.logmate.tailer.parser.ParsedLogData;
+import javax.inject.Inject;
 
 public class DefaultLogEventListener implements LogEventListener {
 
@@ -18,6 +19,7 @@ public class DefaultLogEventListener implements LogEventListener {
   // 로그 익스포터 인터페이스
   private final LogExporter logExporter;
 
+  @Inject
   public DefaultLogEventListener(LogParser logParser, LogFilter logFilter,
       LogExporter logExporter) {
     this.logParser = logParser;
