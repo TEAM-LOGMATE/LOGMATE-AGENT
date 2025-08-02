@@ -1,4 +1,4 @@
-package com.logmate.injection.config.loader;
+package com.logmate.injection.config.util;
 
 import com.logmate.injection.config.WatcherConfig;
 import java.io.InputStream;
