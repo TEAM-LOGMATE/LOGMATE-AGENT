@@ -1,7 +1,7 @@
 package com.logmate.tailer;
 
 import com.logmate.component.ComponentRegistryHolder;
-import com.logmate.injection.config.WatcherConfigHolder;
+import com.logmate.injection.config.util.WatcherConfigHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
