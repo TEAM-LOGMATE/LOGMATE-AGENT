@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class ExporterConfig {
 
   private String pushURL;
-  private boolean compressEnabled;
+  private Boolean compressEnabled;
   private int retryIntervalSec;
   private int maxRetryCount;
 }
