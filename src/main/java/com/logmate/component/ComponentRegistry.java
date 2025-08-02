@@ -1,6 +1,7 @@
 package com.logmate.component;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 import com.logmate.injection.config.WatcherConfig;
 import com.logmate.tailer.LogTailer;
 import com.logmate.tailer.exporter.LogExporter;
@@ -28,11 +29,13 @@ public class ComponentRegistry extends AbstractModule {
     bind(LogFilter.class).to(NonLogFilter.class);
     bind(LogExporter.class).toInstance(new HttpLogExporter(config.getExporter().getPushURL()));
     bind(LogEventListener.class).to(DefaultLogEventListener.class);
-    bind(LogTailer.class).toInstance(
-        new FileLogTailer(
-            new File(config.getTailer().getFilePaths().get(0)),
-            getProvider(LogEventListener.class).get()
-        )
+  }
+
+  @Provides
+  public LogTailer provideLogTailer(LogEventListener listener) {
+    return new FileLogTailer(
+        new File(config.getTailer().getFilePaths().get(0)),
+        listener
     );
   }
 }
