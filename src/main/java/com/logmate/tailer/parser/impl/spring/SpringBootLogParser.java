@@ -1,13 +1,26 @@
 package com.logmate.tailer.parser.impl.spring;
 
+import com.logmate.injection.config.ParserConfig;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import com.logmate.tailer.parser.LogParser;
 import com.logmate.tailer.parser.ParsedLogData;
+import lombok.RequiredArgsConstructor;
 
 
 public class SpringBootLogParser implements LogParser {
-  private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+  private final ParserConfig config;
+  private final DateTimeFormatter formatter;
+  private final ZoneId zoneId;
+
+  public SpringBootLogParser(ParserConfig config) {
+    this.formatter = DateTimeFormatter.ofPattern(config.getConfig().getTimestampPattern());
+    this.zoneId = ZoneId.of(config.getConfig().getTimezone());
+    this.config = config;
+  }
 
   /**
    * 1초마다 받아 온 로그들을 한 줄씩 parser -> filter 를 통과시켜 버퍼링해둔다.
@@ -18,9 +31,13 @@ public class SpringBootLogParser implements LogParser {
   @Override
   public ParsedLogData parse(String rawLine) {
     try {
+      if (rawLine == null || rawLine.isBlank()) {
+        return fallback("BLANK_LINE");
+      }
       // 날짜 + 시간
       String timestampStr = rawLine.substring(0, 19);
       LocalDateTime timestamp = LocalDateTime.parse(timestampStr, formatter);
+      ZonedDateTime zonedTimestamp = timestamp.atZone(zoneId);
 
       // 스레드 이름
       int threadStart = rawLine.indexOf('[');
@@ -32,19 +49,23 @@ public class SpringBootLogParser implements LogParser {
       String level = afterThread.substring(0, afterThread.indexOf(' '));
 
       // 로거 이름과 메시지
-      int loggerStart = afterThread.indexOf(level) + level.length();
       int dashIndex = rawLine.indexOf(" - ");
       String logger = rawLine.substring(threadEnd + 2 + level.length(), dashIndex).trim();
       String message = rawLine.substring(dashIndex + 3).trim();
 
-      return new SpringBootParsedLogData(true, timestamp, level, thread, logger, message);
+      return new SpringBootParsedLogData(true, zonedTimestamp.toLocalDateTime(), level, thread, logger, message);
     } catch (Exception e) {
-      // 파싱 실패 시 null 반환 또는 로그 원본 그대로 객체에 담을 수도 있음
-      if (rawLine.isBlank()) {
-        return new SpringBootParsedLogData(false, LocalDateTime.now(), "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN");
-
-      }
-      return new SpringBootParsedLogData(false, LocalDateTime.now(), "UNKNOWN", "UNKNOWN", "UNKNOWN", rawLine);
+      return fallback(rawLine);
     }
+  }
+
+  private ParsedLogData fallback(String raw) {
+    return new SpringBootParsedLogData(false,
+        LocalDateTime.now(zoneId),
+        "UNKNOWN",
+        "UNKNOWN",
+        config.getFallback().getUnstructuredTag(),
+        raw
+    );
   }
 }
