@@ -1,5 +1,6 @@
 package com.logmate.tailer.impl;
 
+import com.logmate.injection.config.TailerConfig;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,31 +18,29 @@ import java.util.StringTokenizer;
  */
 public class FileLogTailer implements LogTailer {
 
+  private final TailerConfig config;
+  //로그 수신 시 이벤트를 처리할 리스너
+  private final LogEventListener listener;
   // 감시할 로그 파일
   private final File logFile;
   private final File metaDataFile;
-  //로그 수신 시 이벤트를 처리할 리스너
-  private final LogEventListener listener;
   // 마지막으로 읽은 파일 위치 (바이트 기준)
   private long lastKnownPosition;
 
   /**
-   * 로그 파일과 이벤트 리스너를 받아 초기화
+   * Tailer 설정과 이벤트 리스너를 받아 초기화
    *
-   * @param logFile  감시할 로그 파일
-   * @param metaDataFilePath 포지션 정보 등을 담을 파일 이름
+   * @param config 테일러 설정
    * @param listener 로그 이벤트 리스너
    */
-  public FileLogTailer(File logFile, String metaDataFilePath, LogEventListener listener) {
-
-    this.logFile = logFile;
+  public FileLogTailer(TailerConfig config, LogEventListener listener, Integer thNum) {
+    this.config = config;
     this.listener = listener;
+    this.logFile = new File(config.getFilePath());
 
-    // metaData 파일 객체 생성 및 부모 디렉터리 객체 생성
-    File metaDataFile = new File(metaDataFilePath);
+    File metaDataFile = new File(config.getMetaDataFilePathPrefix() + thNum + ".txt");
     File parentDir = metaDataFile.getParentFile();
 
-    // 부모 디렉토리가 없으면 생성
     if (parentDir != null && !parentDir.exists()) {
       parentDir.mkdirs();
     }
@@ -60,10 +59,6 @@ public class FileLogTailer implements LogTailer {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-  }
-
-  public FileLogTailer(File logFile, LogEventListener listener) {
-    this(logFile, "logs/position.txt", listener);
   }
 
   /**
@@ -124,7 +119,7 @@ public class FileLogTailer implements LogTailer {
         //로그가 추가되지 않은 상황이므로 아무것도 실행하지 않는다.
         
         savePositionToFile(lastKnownPosition); // 변경된 포지션 정보 메타데이터 파일에 저장
-        Thread.sleep(1000); // 1초 간격으로 체크
+        Thread.sleep(config.getReadIntervalMs()); // 1초 간격으로 체크
       }
     } catch (Exception e) {
       e.printStackTrace();
