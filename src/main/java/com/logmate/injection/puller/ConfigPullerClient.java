@@ -17,7 +17,7 @@ public class ConfigPullerClient {
 
   private final ObjectMapper objectMapper = new ObjectMapper();
 
-  public Optional<WatcherConfig> pull(String requestURL, String accessToken) {
+  public Optional<ConfigDTO> pull(String requestURL, String accessToken) {
     try {
       // Request Setting
       URL url = new URL(requestURL);
@@ -47,7 +47,7 @@ public class ConfigPullerClient {
         }
       }
 
-      return Optional.of(objectMapper.readValue(json.toString(), WatcherConfig.class));
+      return Optional.of(objectMapper.readValue(json.toString(), ConfigDTO.class));
     } catch (MalformedURLException e) {
       log.error("Invalid pull URL: {}", requestURL);
       return Optional.empty();
