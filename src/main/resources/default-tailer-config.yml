@@ -1,0 +1,37 @@
+#로그 수집 관련 설정
+thNum: 1
+etag: 'tag'
+tailer:
+  #수집할 로그 파일 경로 목록
+  filePath: 'app.log'
+  #로그파일 읽는 주기 (Ms)
+  readIntervalMs: 1000
+  multiline:
+    enabled: true
+    pattern: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}' # 시작 패턴 (이 패턴이 나오면 새 로그로 간주)
+    timeoutMs: 2000 #병합 대기 시간 초과 시 중단
+    failedMergeTag: 'merge_failed' #병합 실패 태그
+  metaDataFilePathPrefix: 'logs/position'
+
+#로그 전송 관련 설정
+exporter:
+  pushURL: 'https://logmate.example.com/api/v1/logs'
+  compressEnabled: false
+  retryIntervalSec: 5
+  maxRetryCount: 3
+
+#로그 파싱 관련 설정
+parser:
+  type: 'springboot'
+  config:
+    timestampPattern: 'yyyy-MM-dd HH:mm:ss'
+    timezone: 'Asia/Seoul'
+  fallback:
+    unstructuredTag: 'unparsed'
+
+#로그 필터링 관련 설정
+filter:
+  type: 'level'
+  rules:
+    - 'level != DEBUG'
+    - 'logger != healthcheck'

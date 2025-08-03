@@ -1,0 +1,5 @@
+# Agent 설정파일: watcher-default-config.yml
+#앞으로 할일. tailer 설정 관련 기능 구현. -> 다 구현하면 끝
+agentId: 'id'
+accessToken: 'your-agent-token'
+etag: 'tag'

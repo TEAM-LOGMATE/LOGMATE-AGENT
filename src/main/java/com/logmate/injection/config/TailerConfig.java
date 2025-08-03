@@ -11,9 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TailerConfig {
 
-  private List<String> filePaths;
+  private String filePath;
   private int readIntervalMs;
   private MultilineConfig multiline;
+  private String metaDataFilePathPrefix;
 
   @Data
   @NoArgsConstructor

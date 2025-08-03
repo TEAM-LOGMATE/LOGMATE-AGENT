@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PullerConfig {
+
   private String pullURL;
   private int intervalSec;
+  private String etag;
 }

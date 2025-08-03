@@ -7,12 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WatcherConfig {
+public class AgentConfig {
 
+  private String agentId;
+  private String accessToken;
   private String etag;
-  private Integer thNum;
-  private TailerConfig tailer;
-  private ExporterConfig exporter;
-  private ParserConfig parser;
-  private FilterConfig filter;
 }
