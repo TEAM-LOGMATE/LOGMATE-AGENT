@@ -1,5 +1,6 @@
 package com.logmate.injection.config.util;
 
+import com.logmate.injection.config.AgentConfig;
 import com.logmate.injection.config.ExporterConfig;
 import com.logmate.injection.config.FilterConfig;
 import com.logmate.injection.config.ParserConfig;
@@ -12,11 +13,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class WatcherConfigValidator {
+public class ConfigValidator {
 
-  public static void validate(WatcherConfig config) {
+  public static void validate(AgentConfig config) {
     if (config == null) {
-      throw new IllegalArgumentException("WatcherConfig is null.");
+      throw new IllegalArgumentException("AgentConfig is null.");
     }
 
     if (isNullOrBlank(config.getAgentId())) {
@@ -30,16 +31,31 @@ public class WatcherConfigValidator {
     if (isNullOrBlank(config.getEtag())) {
       throw new IllegalArgumentException("agent.eTag must not be empty.");
     }
+  }
 
-    if (isNull(config.getThNum())) {
-      throw new IllegalArgumentException("agent.tNum must not be empty.");
+  public static void validate(PullerConfig config) {
+    if (config == null) {
+      throw new IllegalArgumentException("config-puller section is missing.");
+    }
+
+    if (isNullOrBlank(config.getPullURL()) || !validateURL(config.getPullURL())) {
+      throw new IllegalArgumentException("config-puller.pullURL must be a valid URL.");
+    }
+
+    if (config.getIntervalSec() <= 10) {
+      throw new IllegalArgumentException("config-puller.intervalSec must be greater than 10.");
+    }
+  }
+
+  public static void validate(WatcherConfig config) {
+    if (config == null) {
+      throw new IllegalArgumentException("WatcherConfig is null.");
     }
 
     validateTailer(config.getTailer());
     validateExporter(config.getExporter());
     validateParser(config.getParser());
     validateFilter(config.getFilter());
-    validatePuller(config.getPuller());
   }
 
   private static void validateTailer(TailerConfig tailer) {
@@ -47,7 +63,7 @@ public class WatcherConfigValidator {
       throw new IllegalArgumentException("tailer section is missing.");
     }
 
-    if (!validateFilePaths(tailer.getFilePaths())) {
+    if (!validateFilePath(tailer.getFilePath())) {
       throw new IllegalArgumentException("tailer.filePaths must be a valid file path list.");
     }
 
@@ -124,20 +140,6 @@ public class WatcherConfigValidator {
     }
   }
 
-  private static void validatePuller(PullerConfig puller) {
-    if (puller == null) {
-      throw new IllegalArgumentException("config-puller section is missing.");
-    }
-
-    if (isNullOrBlank(puller.getPullURL()) || !validateURL(puller.getPullURL())) {
-      throw new IllegalArgumentException("config-puller.pullURL must be a valid URL.");
-    }
-
-    if (puller.getIntervalSec() <= 10) {
-      throw new IllegalArgumentException("config-puller.intervalSec must be greater than 10.");
-    }
-  }
-
   private static boolean isNullOrBlank(String s) {
     return s == null || s.trim().isEmpty();
   }
@@ -180,6 +182,21 @@ public class WatcherConfigValidator {
         return false;
       }
     }
+    return true;
+  }
+
+  public static boolean validateFilePath(String filePath) {
+    if (filePath == null || filePath.isEmpty()) {
+      return false;
+    }
+
+    Path path = Paths.get(filePath);
+
+    // 금지 패턴
+    if (filePath.contains("*")) {
+      return false;
+    }
+
     return true;
   }
 }
