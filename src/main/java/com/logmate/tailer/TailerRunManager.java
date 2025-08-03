@@ -1,19 +1,18 @@
 package com.logmate.tailer;
 
 import com.logmate.component.ComponentRegistryHolder;
+import com.logmate.injection.config.util.AgentConfigHolder;
 import com.logmate.injection.config.util.WatcherConfigHolder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class TailerRunManager {
-
-  private static final Logger log = LoggerFactory.getLogger(TailerRunManager.class);
-
   private static Thread tailerThread;
 
   public static void start() {
-    ComponentRegistryHolder.create(WatcherConfigHolder.get());
-    tailerThread = new Thread(ComponentRegistryHolder.getTailer());
+    //todo: 멀티 thread방식 변경
+    ComponentRegistryHolder.create(1, WatcherConfigHolder.get(1).get(), AgentConfigHolder.get());
+    tailerThread = new Thread(ComponentRegistryHolder.getTailer(1));
     tailerThread.start();
     log.info("log tailer started...");
   }
@@ -23,9 +22,9 @@ public class TailerRunManager {
     if (tailerThread != null) {
       tailerThread.interrupt();
     }
-
-    ComponentRegistryHolder.remake(WatcherConfigHolder.get());
-    tailerThread = new Thread(ComponentRegistryHolder.getTailer());
+    //todo: 멀티 thread방식 변경
+    ComponentRegistryHolder.remake(1, WatcherConfigHolder.get(1).get(), AgentConfigHolder.get());
+    tailerThread = new Thread(ComponentRegistryHolder.getTailer(1));
     tailerThread.start();
     log.info("log tailer restarted...");
   }
