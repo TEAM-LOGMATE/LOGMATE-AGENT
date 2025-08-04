@@ -20,14 +20,6 @@ public class WatcherConfigHolder {
     return Optional.of(watcherConfigMap.get(thNum));
   }
 
-  private static Map<Integer, WatcherConfig> createDefault() {
-    WatcherConfig load = YamlConfigLoader.loadTailerConfig();
-    Map<Integer, WatcherConfig> result = new ConcurrentHashMap<>();
-    result.put(load.getThNum(), load);
-    log.info("[WatcherConfigHolder] Default watcher config loaded.{}", load);
-    return result;
-  }
-
   public static boolean update(WatcherConfig watcherConfig, Integer thNum) {
     try {
       ConfigValidator.validate(watcherConfig);

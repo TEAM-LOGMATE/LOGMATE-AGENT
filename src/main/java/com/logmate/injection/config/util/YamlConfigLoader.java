@@ -10,14 +10,6 @@ import org.yaml.snakeyaml.constructor.Constructor;
 
 public class YamlConfigLoader {
 
-  public static WatcherConfig loadTailerConfig() {
-    Yaml yaml = new Yaml(new Constructor(WatcherConfig.class, new LoaderOptions()));
-    InputStream inputStream = YamlConfigLoader.class
-        .getClassLoader()
-        .getResourceAsStream("default-tailer-config.yml");
-    return yaml.load(inputStream);
-  }
-
   public static PullerConfig loadPullerConfig() {
     Yaml yaml = new Yaml(new Constructor(PullerConfig.class, new LoaderOptions()));
     InputStream inputStream = YamlConfigLoader.class
