@@ -3,24 +3,31 @@ package com.logmate.tailer.parser.impl.spring;
 
 import java.time.LocalDateTime;
 import com.logmate.tailer.parser.ParsedLogData;
+import lombok.Getter;
 
+@Getter
 public class SpringBootParsedLogData implements ParsedLogData {
+
   private boolean isFormatCorrect;
   private LocalDateTime timestamp;
   private String level;
   private String thread;
   private String logger;
   private String message;
+  private String tag;
 
-  public SpringBootParsedLogData(boolean isFormatCorrect, LocalDateTime timestamp, String level, String thread,
+  public SpringBootParsedLogData(boolean isFormatCorrect, LocalDateTime timestamp, String level,
+      String thread,
       String logger,
-      String message) {
+      String message,
+      String tag) {
     this.isFormatCorrect = isFormatCorrect;
     this.timestamp = timestamp;
     this.level = level;
     this.thread = thread;
     this.logger = logger;
     this.message = message;
+    this.tag = tag;
   }
 
   @Override
@@ -37,6 +44,7 @@ public class SpringBootParsedLogData implements ParsedLogData {
         ",\"thread\":\"" + thread + '\"' +
         ",\"logger\":\"" + logger + '\"' +
         ",\"message\":\"" + message + '\"' +
+        ",\"tag\":\"" + tag + '\"' +
         '}';
   }
 }

@@ -7,18 +7,30 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import com.logmate.tailer.parser.LogParser;
 import com.logmate.tailer.parser.ParsedLogData;
-import lombok.RequiredArgsConstructor;
-
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 public class SpringBootLogParser implements LogParser {
 
   private final ParserConfig config;
   private final DateTimeFormatter formatter;
   private final ZoneId zoneId;
+  private final Set<String> SpringbootLogLevels = new HashSet<>() {
+    {
+      add("INFO");
+      add("DEBUG");
+      add("WARN");
+      add("ERROR");
+      add("TRACE");
+      add("FATAL");
+      add("OFF");
+    }
+  };
 
   public SpringBootLogParser(ParserConfig config) {
     this.formatter = DateTimeFormatter.ofPattern(config.getConfig().getTimestampPattern());
-    this.zoneId = ZoneId.of(config.getConfig().getTimezone());
+    this.zoneId = ZoneId.of(config.getConfig().getTimezone(), ZoneId.SHORT_IDS);
     this.config = config;
   }
 
@@ -34,29 +46,48 @@ public class SpringBootLogParser implements LogParser {
       if (rawLine == null || rawLine.isBlank()) {
         return fallback("BLANK_LINE");
       }
+      StringTokenizer st = new StringTokenizer(rawLine, " ");
+
       // 날짜 + 시간
-      String timestampStr = rawLine.substring(0, 19);
+      String timestampStr = st.nextToken() + " " + st.nextToken();
       LocalDateTime timestamp = LocalDateTime.parse(timestampStr, formatter);
       ZonedDateTime zonedTimestamp = timestamp.atZone(zoneId);
 
       // 스레드 이름
-      int threadStart = rawLine.indexOf('[');
-      int threadEnd = rawLine.indexOf(']');
-      String thread = rawLine.substring(threadStart + 1, threadEnd);
+      String thread = st.nextToken();
+      thread = thread.substring(thread.indexOf('[') + 1, thread.indexOf(']'));
 
       // 로그 레벨
-      String afterThread = rawLine.substring(threadEnd + 2).trim(); // 공백 제거
-      String level = afterThread.substring(0, afterThread.indexOf(' '));
+      String level = st.nextToken();
+
+      if (!SpringbootLogLevels.contains(level)) {
+        throw new IllegalArgumentException();
+      }
 
       // 로거 이름과 메시지
-      int dashIndex = rawLine.indexOf(" - ");
-      String logger = rawLine.substring(threadEnd + 2 + level.length(), dashIndex).trim();
-      String message = rawLine.substring(dashIndex + 3).trim();
+      String logger = st.nextToken();
+      if (!st.nextToken().equals("-")) {
+        throw new IllegalArgumentException();
+      }
 
-      return new SpringBootParsedLogData(true, zonedTimestamp.toLocalDateTime(), level, thread, logger, message);
+      StringBuilder messageBuilder = new StringBuilder();
+      while (st.hasMoreTokens()) {
+        messageBuilder.append(st.nextToken()).append(" ");
+      }
+      String message = messageBuilder.toString().trim();
+      if (message.isEmpty()) {
+        throw new IllegalArgumentException();
+      }
+      return new SpringBootParsedLogData(true, zonedTimestamp.toLocalDateTime(), level, thread, logger, message, "correct");
     } catch (Exception e) {
       return fallback(rawLine);
     }
+  }
+
+  @Override
+  public boolean isFormatCorrect(String rawLine) {
+    ParsedLogData parse = parse(rawLine);
+    return parse.isFormatCorrect();
   }
 
   private ParsedLogData fallback(String raw) {
@@ -64,8 +95,9 @@ public class SpringBootLogParser implements LogParser {
         LocalDateTime.now(zoneId),
         "UNKNOWN",
         "UNKNOWN",
-        config.getFallback().getUnstructuredTag(),
-        raw
+        "UNKNOWN",
+        raw,
+        "parse_fail"
     );
   }
 }
