@@ -8,10 +8,11 @@ import com.logmate.tailer.LogTailer;
 import com.logmate.tailer.exporter.LogExporter;
 import com.logmate.tailer.exporter.impl.HttpLogExporter;
 import com.logmate.tailer.filter.LogFilter;
-import com.logmate.tailer.filter.impl.NonLogFilter;
+import com.logmate.tailer.filter.impl.SpringBootLogFilter;
 import com.logmate.tailer.impl.FileLogTailer;
 import com.logmate.tailer.listener.LogEventListener;
 import com.logmate.tailer.listener.impl.DefaultLogEventListener;
+import com.logmate.tailer.merger.MultilineProcessor;
 import com.logmate.tailer.parser.LogParser;
 import com.logmate.tailer.parser.impl.spring.SpringBootLogParser;
 
@@ -31,16 +32,25 @@ public class ComponentRegistry extends AbstractModule {
     switch (watcherConfig.getParser().getType()) {
       case "springboot":
         bind(LogParser.class).toInstance(new SpringBootLogParser(watcherConfig.getParser()));
+        bind(LogFilter.class).toInstance(new SpringBootLogFilter(watcherConfig.getFilter()));
         break;
       case "json":
         bind(LogParser.class).toInstance(new SpringBootLogParser(watcherConfig.getParser()));
+        bind(LogFilter.class).toInstance(new SpringBootLogFilter(watcherConfig.getFilter()));
       default:
         bind(LogParser.class).toInstance(new SpringBootLogParser(watcherConfig.getParser()));
+        bind(LogFilter.class).toInstance(new SpringBootLogFilter(watcherConfig.getFilter()));
     }
-    bind(LogFilter.class).to(NonLogFilter.class);
     bind(LogExporter.class).toInstance(
         new HttpLogExporter(watcherConfig.getExporter(), agentconfig));
-    bind(LogEventListener.class).to(DefaultLogEventListener.class);
+  }
+
+  @Provides
+  public MultilineProcessor provideMultilineProcessor(LogParser parser) {
+    return new MultilineProcessor(
+        parser,
+        watcherConfig.getMultiline()
+    );
   }
 
   @Provides
@@ -51,5 +61,11 @@ public class ComponentRegistry extends AbstractModule {
         listener,
         1
     );
+  }
+
+  @Provides
+  public LogEventListener provideLogEventListener(LogExporter exporter, LogFilter filter,
+      LogParser parser, MultilineProcessor multilineProcessor) {
+    return new DefaultLogEventListener(parser, filter, exporter, multilineProcessor);
   }
 }
