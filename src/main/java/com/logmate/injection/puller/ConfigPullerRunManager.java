@@ -10,19 +10,14 @@ public class ConfigPullerRunManager {
   public static void start() {
     pullerThread = new Thread(new ConfigPuller());
     pullerThread.start();
-    log.info("configuration puller started...");
+    log.info("[ConfigPullerRunManager] configuration puller started...");
   }
 
   public static void stop() {
     if (pullerThread != null) {
       pullerThread.interrupt();
       pullerThread = null;
-      log.info("configuration puller stopped.");
+      log.info("[ConfigPullerRunManager] configuration puller stopped.");
     }
-  }
-
-  public static void restart() {
-    stop();
-    start();
   }
 }
