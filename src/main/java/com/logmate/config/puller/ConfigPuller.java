@@ -2,10 +2,10 @@ package com.logmate.config.puller;
 
 import com.logmate.config.AgentConfig;
 import com.logmate.config.PullerConfig;
-import com.logmate.config.WatcherConfig;
+import com.logmate.config.LogPiplineConfig;
 import com.logmate.config.holder.AgentConfigHolder;
 import com.logmate.config.holder.PullerConfigHolder;
-import com.logmate.config.holder.WatcherConfigHolder;
+import com.logmate.config.holder.LogPiplineConfigHolder;
 import com.logmate.config.puller.dto.AuthenticationRequestDTO;
 import com.logmate.config.puller.dto.ConfigDTO;
 import com.logmate.config.puller.dto.TokenDTO;
@@ -113,37 +113,37 @@ public class ConfigPuller implements Runnable {
       }
     }
 
-    List<WatcherConfig> responseWatcherConfigs = config.getWatcherConfigs();
+    List<LogPiplineConfig> responseLogPiplineConfigs = config.getLogPiplineConfigs();
 
-    removeMissingTailer(responseWatcherConfigs);
+    removeMissingTailer(responseLogPiplineConfigs);
 
     Set<Integer> needRestartThreadNum = new HashSet<>();
-    for (WatcherConfig responseWatcherConfig : responseWatcherConfigs) {
-      Optional<WatcherConfig> opWatcherConfig = WatcherConfigHolder.get(
-          responseWatcherConfig.getThNum());
+    for (LogPiplineConfig responseLogPiplineConfig : responseLogPiplineConfigs) {
+      Optional<LogPiplineConfig> opWatcherConfig = LogPiplineConfigHolder.get(
+          responseLogPiplineConfig.getThNum());
 
       if (opWatcherConfig.isPresent()) {
-        WatcherConfig watcherConfig = opWatcherConfig.get();
-        if (responseWatcherConfig.getEtag().equals(watcherConfig.getEtag())) {
+        LogPiplineConfig logPiplineConfig = opWatcherConfig.get();
+        if (responseLogPiplineConfig.getEtag().equals(logPiplineConfig.getEtag())) {
           continue;
         }
 
-        if (WatcherConfigHolder.update(responseWatcherConfig, watcherConfig.getThNum())) {
+        if (LogPiplineConfigHolder.update(responseLogPiplineConfig, logPiplineConfig.getThNum())) {
           log.info("[ConfigPuller] WatcherConfig #{} changed. Restart required.",
-              watcherConfig.getThNum());
-          needRestartThreadNum.add(watcherConfig.getThNum());
+              logPiplineConfig.getThNum());
+          needRestartThreadNum.add(logPiplineConfig.getThNum());
         }
       } else {
         // 신규 WatcherConfig 등록 + Tailer 시작
-        boolean inserted = WatcherConfigHolder.put(responseWatcherConfig,
-            responseWatcherConfig.getThNum());
+        boolean inserted = LogPiplineConfigHolder.put(responseLogPiplineConfig,
+            responseLogPiplineConfig.getThNum());
         if (inserted) {
           log.info("[ConfigPuller] New WatcherConfig #{} added. Starting new tailer.",
-              responseWatcherConfig.getThNum());
-          TailerRunManager.start(responseWatcherConfig.getThNum());
+              responseLogPiplineConfig.getThNum());
+          TailerRunManager.start(responseLogPiplineConfig.getThNum());
         } else {
           log.error("[ConfigPuller] Failed to add new WatcherConfig #{}",
-              responseWatcherConfig.getThNum());
+              responseLogPiplineConfig.getThNum());
         }
       }
     }
@@ -161,12 +161,12 @@ public class ConfigPuller implements Runnable {
     resetConfigs();
   }
 
-  private static void removeMissingTailer(List<WatcherConfig> responseWatcherConfigs) {
-    Set<Integer> receivedThreadNums = responseWatcherConfigs.stream()
-        .map(WatcherConfig::getThNum)
+  private static void removeMissingTailer(List<LogPiplineConfig> responseLogPiplineConfigs) {
+    Set<Integer> receivedThreadNums = responseLogPiplineConfigs.stream()
+        .map(LogPiplineConfig::getThNum)
         .collect(Collectors.toSet());
 
-    Set<Integer> existingThreadNums = WatcherConfigHolder.getAllThreadNums(); // 내부 Map keySet
+    Set<Integer> existingThreadNums = LogPiplineConfigHolder.getAllThreadNums(); // 내부 Map keySet
     Set<Integer> removedThreadNums = new HashSet<>(existingThreadNums);
     removedThreadNums.removeAll(receivedThreadNums); // 서버에서 빠진 것만 남음 (집합간의 차)
 
@@ -174,7 +174,7 @@ public class ConfigPuller implements Runnable {
       log.info("[ConfigPuller] WatcherConfig #{} removed from server. Stopping tailer.",
           removedThNum);
       TailerRunManager.stop(removedThNum);
-      WatcherConfigHolder.remove(removedThNum);
+      LogPiplineConfigHolder.remove(removedThNum);
     }
   }
 

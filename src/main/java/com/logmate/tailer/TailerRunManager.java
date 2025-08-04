@@ -1,8 +1,8 @@
 package com.logmate.tailer;
 
-import com.logmate.di.TailerComponentRegistryHolder;
+import com.logmate.di.LogPiplineComponentRegistryHolder;
 import com.logmate.config.holder.AgentConfigHolder;
-import com.logmate.config.holder.WatcherConfigHolder;
+import com.logmate.config.holder.LogPiplineConfigHolder;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +13,9 @@ public class TailerRunManager {
   private static Map<Integer, Thread> tailerThreadMap = new ConcurrentHashMap<>();
 
   public static void start(Integer thNum) {
-    WatcherConfigHolder.get(thNum).ifPresentOrElse(config -> {
-      TailerComponentRegistryHolder.create(thNum, config, AgentConfigHolder.get());
-      Thread thread = new Thread(TailerComponentRegistryHolder.getTailer(thNum));
+    LogPiplineConfigHolder.get(thNum).ifPresentOrElse(config -> {
+      LogPiplineComponentRegistryHolder.create(thNum, config, AgentConfigHolder.get());
+      Thread thread = new Thread(LogPiplineComponentRegistryHolder.getTailer(thNum));
       tailerThreadMap.put(thNum, thread);
       thread.start();
       log.info("[TailerRunManager] Log tailer for thNum #{} started...", thNum);
@@ -31,9 +31,9 @@ public class TailerRunManager {
     }
 
     oldThread.interrupt();
-    WatcherConfigHolder.get(thNum).ifPresentOrElse(config -> {
-      TailerComponentRegistryHolder.remake(thNum, config, AgentConfigHolder.get());
-      Thread thread = new Thread(TailerComponentRegistryHolder.getTailer(thNum));
+    LogPiplineConfigHolder.get(thNum).ifPresentOrElse(config -> {
+      LogPiplineComponentRegistryHolder.remake(thNum, config, AgentConfigHolder.get());
+      Thread thread = new Thread(LogPiplineComponentRegistryHolder.getTailer(thNum));
       tailerThreadMap.put(thNum, thread);
       thread.start();
       log.info("[TailerRunManager] Log tailer for thNum {} restarted...", thNum);

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WatcherConfig {
+public class LogPiplineConfig {
 
   private String etag;
   private Integer thNum;
