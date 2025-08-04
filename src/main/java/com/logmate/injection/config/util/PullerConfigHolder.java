@@ -22,7 +22,7 @@ public class PullerConfigHolder {
     try {
       ConfigValidator.validate(pullerConfig);
     } catch (IllegalArgumentException e) {
-      log.error("Invalid puller config: {}", e.getMessage());
+      log.error("[PullerConfigHolder] Invalid puller config: {}", e.getMessage());
       return false;
     }
 

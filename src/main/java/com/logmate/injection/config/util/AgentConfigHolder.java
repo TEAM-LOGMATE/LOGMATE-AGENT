@@ -14,7 +14,7 @@ public class AgentConfigHolder {
 
   private static AgentConfig createDefault() {
     AgentConfig load = YamlConfigLoader.loadAgentConfig();
-    log.info("Default agent config loaded.{}", load);
+    log.info("[AgentConfigHolder] Default agent config loaded.{}", load);
     return load;
   }
 
@@ -22,7 +22,7 @@ public class AgentConfigHolder {
     try {
       ConfigValidator.validate(agentConfig);
     } catch (IllegalArgumentException e) {
-      log.error("Invalid agent config: {}", e.getMessage());
+      log.error("[AgentConfigHolder] Invalid agent config: {}", e.getMessage());
       return false;
     }
 
