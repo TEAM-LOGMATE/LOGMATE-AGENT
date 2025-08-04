@@ -1,4 +1,4 @@
 #설정 pulling 괄련 설정
-pullURL: 'https://logmate.example.com/api/v1/logs'
+pullURL: 'http://localhost:3000'
 intervalSec: 10
 etag: 'tag'
