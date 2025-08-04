@@ -12,7 +12,6 @@ public class ParserConfig {
 
   private String type;
   private ParserDetailConfig config;
-  private FallbackConfig fallback;
 
   @Data
   @NoArgsConstructor
@@ -21,13 +20,5 @@ public class ParserConfig {
 
     private String timestampPattern;
     private String timezone;
-  }
-
-  @Data
-  @NoArgsConstructor
-  @AllArgsConstructor
-  public static class FallbackConfig {
-
-    private String unstructuredTag;
   }
 }

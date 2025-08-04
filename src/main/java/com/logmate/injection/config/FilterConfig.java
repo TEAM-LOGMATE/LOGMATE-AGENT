@@ -1,6 +1,9 @@
 package com.logmate.injection.config;
 
-import java.util.List;
+import com.logmate.tailer.parser.ParsedLogData;
+import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.function.Predicate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +14,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FilterConfig {
 
-  private String type;
-  private List<String> rules;
+  private Set<String> allowedLevels;
+  private Set<String> allowedLoggers;
+  private Set<String> requiredKeywords;
+  private LocalDateTime after;
 }

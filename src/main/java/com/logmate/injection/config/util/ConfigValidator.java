@@ -3,6 +3,7 @@ package com.logmate.injection.config.util;
 import com.logmate.injection.config.AgentConfig;
 import com.logmate.injection.config.ExporterConfig;
 import com.logmate.injection.config.FilterConfig;
+import com.logmate.injection.config.MultilineConfig;
 import com.logmate.injection.config.ParserConfig;
 import com.logmate.injection.config.PullerConfig;
 import com.logmate.injection.config.TailerConfig;
@@ -56,6 +57,7 @@ public class ConfigValidator {
     validateExporter(config.getExporter());
     validateParser(config.getParser());
     validateFilter(config.getFilter());
+    validateMultiline(config.getMultiline());
   }
 
   private static void validateTailer(TailerConfig tailer) {
@@ -70,15 +72,12 @@ public class ConfigValidator {
     if (tailer.getReadIntervalMs() <= 500) {
       throw new IllegalArgumentException("tailer.readIntervalMs must be greater than 500 Ms.");
     }
+  }
 
-    TailerConfig.MultilineConfig multi = tailer.getMultiline();
+  private static void validateMultiline(MultilineConfig multi) {
     if (multi != null && multi.isEnabled()) {
-      if (isNullOrBlank(multi.getPattern())) {
-        throw new IllegalArgumentException(
-            "tailer.multiline.pattern must not be empty when multiline is enabled.");
-      }
-      if (multi.getTimeoutMs() <= 0) {
-        throw new IllegalArgumentException("tailer.multiline.timeoutMs must be greater than 0.");
+      if (multi.getMaxLines() <= 0) {
+        throw new IllegalArgumentException("multiline.maxLines must be greater than 0.");
       }
     }
   }
@@ -117,12 +116,6 @@ public class ConfigValidator {
       throw new IllegalArgumentException(
           "parser.config.timestampPattern and timezone must not be empty.");
     }
-
-    ParserConfig.FallbackConfig fallback = parser.getFallback();
-    if (fallback != null && isNullOrBlank(fallback.getUnstructuredTag())) {
-      throw new IllegalArgumentException(
-          "parser.fallback.unstructuredTag must not be empty if provided.");
-    }
   }
 
   private static void validateFilter(FilterConfig filter) {
@@ -130,14 +123,6 @@ public class ConfigValidator {
       throw new IllegalArgumentException("filter section is missing.");
     }
 
-    if (isNullOrBlank(filter.getType())) {
-      throw new IllegalArgumentException("filter.type must not be empty.");
-    }
-
-    List<String> rules = filter.getRules();
-    if (rules == null || rules.isEmpty()) {
-      throw new IllegalArgumentException("filter.rules must not be empty.");
-    }
   }
 
   private static boolean isNullOrBlank(String s) {
