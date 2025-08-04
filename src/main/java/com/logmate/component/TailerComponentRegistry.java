@@ -16,12 +16,12 @@ import com.logmate.tailer.merger.MultilineProcessor;
 import com.logmate.tailer.parser.LogParser;
 import com.logmate.tailer.parser.impl.spring.SpringBootLogParser;
 
-public class ComponentRegistry extends AbstractModule {
+public class TailerComponentRegistry extends AbstractModule {
 
   private final WatcherConfig watcherConfig;
   private final AgentConfig agentconfig;
 
-  public ComponentRegistry(WatcherConfig watcherConfig, AgentConfig agentconfig) {
+  public TailerComponentRegistry(WatcherConfig watcherConfig, AgentConfig agentconfig) {
     this.watcherConfig = watcherConfig;
     this.agentconfig = agentconfig;
   }
