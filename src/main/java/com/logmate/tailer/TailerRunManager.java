@@ -1,8 +1,8 @@
 package com.logmate.tailer;
 
-import com.logmate.component.TailerComponentRegistryHolder;
-import com.logmate.injection.config.util.AgentConfigHolder;
-import com.logmate.injection.config.util.WatcherConfigHolder;
+import com.logmate.di.TailerComponentRegistryHolder;
+import com.logmate.config.holder.AgentConfigHolder;
+import com.logmate.config.holder.WatcherConfigHolder;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;

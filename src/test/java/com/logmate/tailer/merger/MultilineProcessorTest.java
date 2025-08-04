@@ -2,10 +2,11 @@ package com.logmate.tailer.merger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.logmate.injection.config.MultilineConfig;
-import com.logmate.injection.config.ParserConfig;
-import com.logmate.injection.config.ParserConfig.ParserDetailConfig;
-import com.logmate.tailer.parser.impl.spring.SpringBootLogParser;
+import com.logmate.config.MultilineConfig;
+import com.logmate.config.ParserConfig;
+import com.logmate.config.ParserConfig.ParserDetailConfig;
+import com.logmate.processor.merger.MultilineProcessor;
+import com.logmate.processor.parser.impl.spring.SpringBootLogParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

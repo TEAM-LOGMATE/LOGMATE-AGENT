@@ -1,6 +1,6 @@
 package com.logmate.tailer.impl;
 
-import com.logmate.injection.config.TailerConfig;
+import com.logmate.config.TailerConfig;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,7 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import com.logmate.tailer.listener.LogEventListener;
+import com.logmate.processor.listener.LogEventListener;
 import com.logmate.tailer.LogTailer;
 import java.util.StringTokenizer;
 

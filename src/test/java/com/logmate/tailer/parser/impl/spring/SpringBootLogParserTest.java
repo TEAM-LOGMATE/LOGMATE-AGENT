@@ -2,9 +2,11 @@ package com.logmate.tailer.parser.impl.spring;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.logmate.injection.config.ParserConfig;
-import com.logmate.injection.config.ParserConfig.ParserDetailConfig;
-import com.logmate.tailer.parser.ParsedLogData;
+import com.logmate.config.ParserConfig;
+import com.logmate.config.ParserConfig.ParserDetailConfig;
+import com.logmate.processor.parser.ParsedLogData;
+import com.logmate.processor.parser.impl.spring.SpringBootLogParser;
+import com.logmate.processor.parser.impl.spring.SpringBootParsedLogData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,6 +1,6 @@
 package com.logmate;
 
-import com.logmate.injection.puller.ConfigPullerRunManager;
+import com.logmate.config.puller.ConfigPullerRunManager;
 
 public class Main {
 
