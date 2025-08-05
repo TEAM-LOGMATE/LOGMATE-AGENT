@@ -31,8 +31,6 @@ public class SpringBootLogFilter implements LogFilter {
       return false;
     }
 
-    if (!springBootLog.isFormatCorrect()) return false;
-
     if (!allowedLevels.isEmpty() && !allowedLevels.contains(springBootLog.getLevel())) return false;
 
     if (!allowedLoggers.isEmpty() && !allowedLoggers.contains(springBootLog.getLogger())) return false;
