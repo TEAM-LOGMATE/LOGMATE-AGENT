@@ -1,1 +1,2 @@
 pullURL: 'http://localhost:3000'
+intervalSec: 30

@@ -1,1 +1,3 @@
 agentId: 'id'
+accessToken: "abc123xyz456token"
+etag: "agent-config-etag-001"
