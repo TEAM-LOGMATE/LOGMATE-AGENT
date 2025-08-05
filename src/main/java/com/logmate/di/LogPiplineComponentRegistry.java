@@ -4,6 +4,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.logmate.config.AgentConfig;
 import com.logmate.config.LogPiplineConfig;
+import com.logmate.processor.exporter.impl.ConsoleLogExporter;
+import com.logmate.processor.filter.impl.TomcatAccessLogFilter;
+import com.logmate.processor.parser.impl.web.TomcatAccessLogParser;
 import com.logmate.tailer.LogTailer;
 import com.logmate.processor.exporter.LogExporter;
 import com.logmate.processor.exporter.impl.HttpLogExporter;
@@ -28,21 +31,22 @@ public class LogPiplineComponentRegistry extends AbstractModule {
 
   @Override
   protected void configure() {
-    //todo: parser type 에 대해 instance 추가
     switch (logPiplineConfig.getParser().getType()) {
       case "springboot":
         bind(LogParser.class).toInstance(new SpringBootLogParser(logPiplineConfig.getParser()));
         bind(LogFilter.class).toInstance(new SpringBootLogFilter(logPiplineConfig.getFilter()));
         break;
-      case "json":
-        bind(LogParser.class).toInstance(new SpringBootLogParser(logPiplineConfig.getParser()));
-        bind(LogFilter.class).toInstance(new SpringBootLogFilter(logPiplineConfig.getFilter()));
+      case "tomcat-access":
+        bind(LogParser.class).toInstance(new TomcatAccessLogParser(logPiplineConfig.getParser()));
+        bind(LogFilter.class).toInstance(new TomcatAccessLogFilter(logPiplineConfig.getFilter()));
+        break;
       default:
         bind(LogParser.class).toInstance(new SpringBootLogParser(logPiplineConfig.getParser()));
         bind(LogFilter.class).toInstance(new SpringBootLogFilter(logPiplineConfig.getFilter()));
     }
     bind(LogExporter.class).toInstance(
-        new HttpLogExporter(logPiplineConfig.getExporter(), agentconfig));
+        new ConsoleLogExporter());
+        //new HttpLogExporter(logPiplineConfig.getExporter(), agentconfig));
   }
 
   @Provides
