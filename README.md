@@ -23,7 +23,8 @@
 
 ---
 
-## 클래스 다이어그램
+## 📂 클래스 다이어그램
+<img width="1700" height="1411" alt="TailMateArchitecture" src="https://github.com/user-attachments/assets/a526ba34-56df-443a-8179-540c9757981e" />
 
 ---
 ## 📂 패키지 구조
@@ -94,21 +95,20 @@ docker run -v /your/logs:/logs -e AGENT_ID=my-agent logmate-agent
 
 ---
 
-### 라이선스
+### 📄 라이선스
 본 프로젝트는 **Apache License 2.0** 에 따라 라이선스가 부여됩니다.
 자세한 내용은 [LICENSE](./LICENSE) 파일을 참조하세요.
 
 ---
 
-### 기여 가이드
-- PR 생성 전 [CONTRIBUTING.md] 문서를 참고해 주세요.
-- 커밋 메시지는 [Commit 템플릿]을 따릅니다.
+### 🙏 기여 가이드
+- PR 생성은 [pull_request_template.md](./github/pull_request_template.md) 문서를 참고해 주세요.
 - 로그파이프라인 API 구조/기능은 [인터페이스 명세서]에서 확인하실 수 있습니다.
 
 ---
 
-### 연락처
-kan0202@naver.com
+### 📲 연락처
+email: kan0202@naver.com
 
 ---
 
