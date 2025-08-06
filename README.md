@@ -103,7 +103,7 @@ docker run -v /your/logs:/logs -e AGENT_ID=my-agent logmate-agent
 
 ### 🙏 기여 가이드
 - PR 생성은 [pull_request_template.md](./github/pull_request_template.md) 문서를 참고해 주세요.
-- 로그파이프라인 API 구조/기능은 [인터페이스 명세서]에서 확인하실 수 있습니다.
+- 로그파이프라인 API 구조/기능은 [로그 파이프라인 개발 가이드 Wiki](https://github.com/TEAM-LOGMATE/LOGMATE-AGENT/wiki/LogPipeline-Development-Guide)에서 확인하실 수 있습니다.
 
 ---
 
