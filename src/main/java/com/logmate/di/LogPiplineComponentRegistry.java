@@ -36,7 +36,7 @@ public class LogPiplineComponentRegistry extends AbstractModule {
         bind(LogParser.class).toInstance(new SpringBootLogParser(logPiplineConfig.getParser()));
         bind(LogFilter.class).toInstance(new SpringBootLogFilter(logPiplineConfig.getFilter()));
         break;
-      case "tomcat-access":
+      case "tomcat":
         bind(LogParser.class).toInstance(new TomcatAccessLogParser(logPiplineConfig.getParser()));
         bind(LogFilter.class).toInstance(new TomcatAccessLogFilter(logPiplineConfig.getFilter()));
         break;
