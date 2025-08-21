@@ -1,6 +1,8 @@
 package com.logmate.processor.exporter.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.logmate.config.AgentConfig;
 import com.logmate.config.ExporterConfig;
 import com.logmate.processor.exporter.LogExporter;
@@ -22,7 +24,8 @@ public class HttpLogExporter implements LogExporter {
 
   private final ExporterConfig exporterConfig;
   private final AgentConfig agentConfig;
-  private final ObjectMapper mapper = new ObjectMapper();
+  private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule()).disable(
+      SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
   @Override
   public void export(List<ParsedLogData> logDataList) {
@@ -55,7 +58,7 @@ public class HttpLogExporter implements LogExporter {
         }
 
         int responseCode = conn.getResponseCode();
-        log.debug("log push response code: {}", responseCode);
+        log.info("log push response code: {}", responseCode);
         if (responseCode >= 200 && responseCode < 300) {
           log.debug("log push succeeded");
           break; // 성공
