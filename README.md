@@ -58,27 +58,21 @@
 
 - Java 17+
 - 운영 체제: Linux/macOS/Windows
-- Docker (Docker 로 실행 시)
 
 ### 2. 실행 방법
 
 #### ✅ 빌드 및 직접 실행
 ```bash
-git clone https://github.com/your-org/logmate-agent.git
-cd logmate-agent
+git clone https://github.com/TEAM-LOGMATE/LOGMATE-AGENT.git
+cd LOGMATE-AGENT
 ./gradlew build
-java -jar build/libs/logmate-agent.jar
+java -jar build/libs/logmate-agent.jar --agentId=yourId
 ```
 
-### ✅ Docker로 실행
+####✅ Jar 파일로 실행
 ```bash
-docker build -t logmate-agent .
-docker run -v /your/logs:/logs -e AGENT_ID=my-agent logmate-agent
+java -jar logmate-agent.jar --agentId=yourId
 ```
----
-
-### ✅ Jar 파일로 실행
-작성예정
 ---
 
 ### 📄 오픈소스 라이선스
