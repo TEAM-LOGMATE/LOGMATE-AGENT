@@ -69,7 +69,7 @@ cd LOGMATE-AGENT
 java -jar build/libs/logmate-agent.jar --agentId=yourId
 ```
 
-####✅ Jar 파일로 실행
+#### ✅ Jar 파일로 실행
 ```bash
 java -jar logmate-agent.jar --agentId=yourId
 ```
