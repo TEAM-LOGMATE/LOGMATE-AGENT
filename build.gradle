@@ -46,4 +46,10 @@ jar {
                 'Main-Class': 'com.logmate.Main'
         )
     }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    // 이 부분을 추가하여 중복 파일 문제를 해결합니다.
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
