@@ -45,8 +45,8 @@ public class LogPiplineComponentRegistry extends AbstractModule {
         bind(LogFilter.class).toInstance(new SpringBootLogFilter(logPiplineConfig.getFilter()));
     }
     bind(LogExporter.class).toInstance(
-        new ConsoleLogExporter());
-        //new HttpLogExporter(logPiplineConfig.getExporter(), agentconfig));
+        //new ConsoleLogExporter());
+        new HttpLogExporter(logPiplineConfig.getExporter(), agentconfig));
   }
 
   @Provides

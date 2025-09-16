@@ -2,7 +2,7 @@ package com.logmate.config.holder;
 
 import com.logmate.config.PullerConfig;
 import com.logmate.config.validator.ConfigValidator;
-import com.logmate.config.loader.YamlConfigLoader;
+import com.logmate.init.config.loader.YamlConfigLoader;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

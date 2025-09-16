@@ -60,7 +60,7 @@ public class HttpLogExporter implements LogExporter {
         int responseCode = conn.getResponseCode();
         log.info("log push response code: {}", responseCode);
         if (responseCode >= 200 && responseCode < 300) {
-          log.debug("log push succeeded");
+          log.info("log push succeeded");
           break; // 성공
         }
         log.debug("log push failed");
@@ -70,11 +70,10 @@ public class HttpLogExporter implements LogExporter {
       } catch (IOException | InterruptedException e) {
         attempt++;
         if (attempt > exporterConfig.getMaxRetryCount()) {
-          log.error("Failed to push logs after retries", e);
+          log.info("Failed to push logs after retries", e);
         }
       }
     }
-    log.error("Failed to push logs after retries");
   }
 
   private byte[] compress(String input) {

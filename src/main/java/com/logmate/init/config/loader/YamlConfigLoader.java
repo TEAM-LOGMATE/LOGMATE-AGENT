@@ -1,4 +1,4 @@
-package com.logmate.config.loader;
+package com.logmate.init.config.loader;
 
 import com.logmate.config.AgentConfig;
 import com.logmate.config.PullerConfig;
