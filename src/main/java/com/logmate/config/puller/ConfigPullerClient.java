@@ -2,7 +2,7 @@ package com.logmate.config.puller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.logmate.config.puller.dto.AuthenticationRequestDTO;
+import com.logmate.bootstrap.auth.AuthenticationRequestDTO;
 import com.logmate.config.puller.dto.ConfigDTO;
 import com.logmate.config.puller.dto.TokenDTO;
 import java.io.IOException;
