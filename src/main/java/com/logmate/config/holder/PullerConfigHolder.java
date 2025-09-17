@@ -2,22 +2,15 @@ package com.logmate.config.holder;
 
 import com.logmate.config.PullerConfig;
 import com.logmate.config.validator.ConfigValidator;
-import com.logmate.init.config.loader.YamlConfigLoader;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class PullerConfigHolder {
 
-  private static PullerConfig pullerConfig = createDefault();
+  private static PullerConfig pullerConfig;
 
   public static PullerConfig get() {
     return pullerConfig;
-  }
-
-  private static PullerConfig createDefault() {
-    PullerConfig load = YamlConfigLoader.loadPullerConfig();
-    log.info("Default puller config loaded.{}", load);
-    return load;
   }
 
   public static boolean update(PullerConfig pullerConfig) {

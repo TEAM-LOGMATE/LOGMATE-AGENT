@@ -2,22 +2,15 @@ package com.logmate.config.holder;
 
 import com.logmate.config.AgentConfig;
 import com.logmate.config.validator.ConfigValidator;
-import com.logmate.init.config.loader.YamlConfigLoader;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class AgentConfigHolder {
 
-  private static AgentConfig agentConfig = createDefault();
+  private static AgentConfig agentConfig;
 
   public static AgentConfig get() {
     return agentConfig;
-  }
-
-  private static AgentConfig createDefault() {
-    AgentConfig load = YamlConfigLoader.loadAgentConfig();
-    log.info("[AgentConfigHolder] Default agent config loaded.{}", load);
-    return load;
   }
 
   public static boolean update(AgentConfig agentConfig) {
