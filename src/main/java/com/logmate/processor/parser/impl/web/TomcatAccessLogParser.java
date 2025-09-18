@@ -64,7 +64,7 @@ public class TomcatAccessLogParser implements LogParser {
     return new TomcatAccessLogParsedLogData(
         false,
         "UNKNOWN",
-        LocalDateTime.now(),
+        LocalDateTime.now().withNano(0),
         "UNKNOWN",
         "UNKNOWN",
         "UNKNOWN",
