@@ -18,7 +18,6 @@ public class ParserConfig {
   @AllArgsConstructor
   public static class ParserDetailConfig {
 
-    private String timestampPattern;
     private String timezone;
   }
 }

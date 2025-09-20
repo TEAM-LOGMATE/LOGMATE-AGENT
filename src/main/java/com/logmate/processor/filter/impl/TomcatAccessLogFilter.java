@@ -11,13 +11,10 @@ public class TomcatAccessLogFilter implements LogFilter {
 
   // Web 로그 전용 필터 항목
   private final Set<String> allowedMethods;
-  private final Set<Integer> allowedStatusCodes;
-  private final Set<String> urlPrefix;
+
 
   public TomcatAccessLogFilter(FilterConfig config) {
     this.allowedMethods = config.getAllowedMethods();
-    this.allowedStatusCodes = config.getAllowedStatusCodes();
-    this.urlPrefix = config.getUrlPrefix();
   }
 
   @Override
@@ -28,17 +25,6 @@ public class TomcatAccessLogFilter implements LogFilter {
 
     // 요청 메서드 필터링
     if (!allowedMethods.isEmpty() && !allowedMethods.contains(webLog.getMethod())) return false;
-
-    // 상태 코드 필터링
-    if (!allowedStatusCodes.isEmpty() && !allowedStatusCodes.contains(webLog.getStatusCode())) return false;
-
-    // URL prefix 필터링
-    if (!urlPrefix.isEmpty()) {
-      Optional<String> any = urlPrefix.stream()
-          .filter(url -> webLog.getUrl().startsWith(url))
-          .findAny();
-      if (any.isEmpty()) return false;
-    }
 
     return true;
   }
