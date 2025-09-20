@@ -1,4 +1,4 @@
-package com.logmate.config;
+package com.logmate.config.data.pipeline;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;

@@ -1,7 +1,7 @@
 package com.logmate.bootstrap.config.loader;
 
-import com.logmate.config.AgentConfig;
-import com.logmate.config.PullerConfig;
+import com.logmate.config.data.AgentConfig;
+import com.logmate.config.data.PullerConfig;
 
 public interface ConfigLoader {
   PullerConfig loadPullerConfig();

@@ -1,18 +1,13 @@
 package com.logmate.processor.parser.impl.spring;
 
-import com.logmate.config.ParserConfig;
+import com.logmate.config.data.pipeline.ParserConfig;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import com.logmate.processor.parser.LogParser;
 import com.logmate.processor.parser.ParsedLogData;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;

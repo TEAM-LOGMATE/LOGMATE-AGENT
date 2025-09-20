@@ -1,6 +1,6 @@
 package com.logmate.processor.merger;
 
-import com.logmate.config.MultilineConfig;
+import com.logmate.config.data.pipeline.MultilineConfig;
 import com.logmate.processor.parser.LogParser;
 import java.util.ArrayList;
 import java.util.List;

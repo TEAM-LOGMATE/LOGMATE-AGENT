@@ -1,7 +1,7 @@
 package com.logmate.config.holder;
 
 
-import com.logmate.config.LogPiplineConfig;
+import com.logmate.config.data.pipeline.LogPiplineConfig;
 import com.logmate.config.validator.ConfigValidator;
 import java.util.Map;
 import java.util.Optional;

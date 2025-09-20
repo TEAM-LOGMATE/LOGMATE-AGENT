@@ -1,6 +1,6 @@
 package com.logmate.bootstrap.auth;
 
-import com.logmate.config.AgentConfig;
+import com.logmate.config.data.AgentConfig;
 import com.logmate.config.holder.AgentConfigHolder;
 import com.logmate.config.holder.PullerConfigHolder;
 import com.logmate.config.puller.dto.TokenDTO;

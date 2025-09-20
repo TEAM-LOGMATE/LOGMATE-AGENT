@@ -1,7 +1,7 @@
 package com.logmate.config.puller;
 
-import com.logmate.config.AgentConfig;
-import com.logmate.config.PullerConfig;
+import com.logmate.config.data.AgentConfig;
+import com.logmate.config.data.PullerConfig;
 import com.logmate.config.holder.AgentConfigHolder;
 import com.logmate.config.holder.PullerConfigHolder;
 import com.logmate.config.puller.dto.ConfigDTO;

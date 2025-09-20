@@ -1,6 +1,6 @@
 package com.logmate.tailer.impl;
 
-import com.logmate.config.TailerConfig;
+import com.logmate.config.data.TailerConfig;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;

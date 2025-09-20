@@ -1,8 +1,8 @@
 package com.logmate.config.puller.dto;
 
-import com.logmate.config.AgentConfig;
-import com.logmate.config.PullerConfig;
-import com.logmate.config.LogPiplineConfig;
+import com.logmate.config.data.AgentConfig;
+import com.logmate.config.data.PullerConfig;
+import com.logmate.config.data.pipeline.LogPiplineConfig;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;

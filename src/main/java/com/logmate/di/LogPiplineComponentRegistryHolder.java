@@ -2,8 +2,8 @@ package com.logmate.di;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.logmate.config.AgentConfig;
-import com.logmate.config.LogPiplineConfig;
+import com.logmate.config.data.AgentConfig;
+import com.logmate.config.data.pipeline.LogPiplineConfig;
 import com.logmate.tailer.LogTailer;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

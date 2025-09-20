@@ -1,13 +1,13 @@
 package com.logmate.config.validator;
 
-import com.logmate.config.AgentConfig;
-import com.logmate.config.ExporterConfig;
-import com.logmate.config.FilterConfig;
-import com.logmate.config.MultilineConfig;
-import com.logmate.config.ParserConfig;
-import com.logmate.config.PullerConfig;
-import com.logmate.config.TailerConfig;
-import com.logmate.config.LogPiplineConfig;
+import com.logmate.config.data.AgentConfig;
+import com.logmate.config.data.pipeline.ExporterConfig;
+import com.logmate.config.data.pipeline.FilterConfig;
+import com.logmate.config.data.pipeline.MultilineConfig;
+import com.logmate.config.data.pipeline.ParserConfig;
+import com.logmate.config.data.PullerConfig;
+import com.logmate.config.data.TailerConfig;
+import com.logmate.config.data.pipeline.LogPiplineConfig;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;

@@ -1,6 +1,6 @@
 package com.logmate.processor.parser.impl.web;
 
-import com.logmate.config.ParserConfig;
+import com.logmate.config.data.pipeline.ParserConfig;
 import com.logmate.processor.parser.LogParser;
 import com.logmate.processor.parser.ParsedLogData;
 import java.time.LocalDateTime;

@@ -2,8 +2,8 @@ package com.logmate.bootstrap.config;
 
 import com.logmate.bootstrap.args.AgentArguments;
 import com.logmate.bootstrap.config.loader.ConfigLoader;
-import com.logmate.config.AgentConfig;
-import com.logmate.config.PullerConfig;
+import com.logmate.config.data.AgentConfig;
+import com.logmate.config.data.PullerConfig;
 import com.logmate.config.holder.AgentConfigHolder;
 import com.logmate.config.holder.PullerConfigHolder;
 import lombok.RequiredArgsConstructor;

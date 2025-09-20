@@ -1,6 +1,6 @@
 package com.logmate.processor.filter.impl;
 
-import com.logmate.config.FilterConfig;
+import com.logmate.config.data.pipeline.FilterConfig;
 import com.logmate.processor.filter.LogFilter;
 import com.logmate.processor.parser.ParsedLogData;
 import com.logmate.processor.parser.impl.web.TomcatAccessLogParsedLogData;

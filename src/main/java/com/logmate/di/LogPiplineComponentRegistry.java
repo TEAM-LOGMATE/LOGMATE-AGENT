@@ -2,9 +2,8 @@ package com.logmate.di;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.logmate.config.AgentConfig;
-import com.logmate.config.LogPiplineConfig;
-import com.logmate.processor.exporter.impl.ConsoleLogExporter;
+import com.logmate.config.data.AgentConfig;
+import com.logmate.config.data.pipeline.LogPiplineConfig;
 import com.logmate.processor.filter.impl.TomcatAccessLogFilter;
 import com.logmate.processor.parser.impl.web.TomcatAccessLogParser;
 import com.logmate.tailer.LogTailer;

@@ -1,6 +1,6 @@
 package com.logmate.config.holder;
 
-import com.logmate.config.PullerConfig;
+import com.logmate.config.data.PullerConfig;
 import com.logmate.config.validator.ConfigValidator;
 import lombok.extern.slf4j.Slf4j;
 

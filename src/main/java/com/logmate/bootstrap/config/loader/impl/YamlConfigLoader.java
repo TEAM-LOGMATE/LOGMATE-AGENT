@@ -1,8 +1,8 @@
 package com.logmate.bootstrap.config.loader.impl;
 
 import com.logmate.bootstrap.config.loader.ConfigLoader;
-import com.logmate.config.AgentConfig;
-import com.logmate.config.PullerConfig;
+import com.logmate.config.data.AgentConfig;
+import com.logmate.config.data.PullerConfig;
 import java.io.InputStream;
 import lombok.RequiredArgsConstructor;
 import org.yaml.snakeyaml.LoaderOptions;
