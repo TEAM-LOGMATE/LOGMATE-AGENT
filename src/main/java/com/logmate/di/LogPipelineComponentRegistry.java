@@ -3,7 +3,7 @@ package com.logmate.di;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.logmate.config.data.AgentConfig;
-import com.logmate.config.data.pipeline.LogPiplineConfig;
+import com.logmate.config.data.pipeline.LogPipelineConfig;
 import com.logmate.processor.filter.impl.TomcatAccessLogFilter;
 import com.logmate.processor.parser.impl.web.TomcatAccessLogParser;
 import com.logmate.tailer.LogTailer;
@@ -18,41 +18,41 @@ import com.logmate.processor.merger.MultilineProcessor;
 import com.logmate.processor.parser.LogParser;
 import com.logmate.processor.parser.impl.spring.SpringBootLogParser;
 
-public class LogPiplineComponentRegistry extends AbstractModule {
+public class LogPipelineComponentRegistry extends AbstractModule {
 
-  private final LogPiplineConfig logPiplineConfig;
+  private final LogPipelineConfig logPipelineConfig;
   private final AgentConfig agentconfig;
 
-  public LogPiplineComponentRegistry(LogPiplineConfig logPiplineConfig, AgentConfig agentconfig) {
-    this.logPiplineConfig = logPiplineConfig;
+  public LogPipelineComponentRegistry(LogPipelineConfig logPipelineConfig, AgentConfig agentconfig) {
+    this.logPipelineConfig = logPipelineConfig;
     this.agentconfig = agentconfig;
   }
 
   @Override
   protected void configure() {
-    switch (logPiplineConfig.getParser().getType()) {
+    switch (logPipelineConfig.getParser().getType()) {
       case "springboot":
-        bind(LogParser.class).toInstance(new SpringBootLogParser(logPiplineConfig.getParser()));
-        bind(LogFilter.class).toInstance(new SpringBootLogFilter(logPiplineConfig.getFilter()));
+        bind(LogParser.class).toInstance(new SpringBootLogParser(logPipelineConfig.getParser()));
+        bind(LogFilter.class).toInstance(new SpringBootLogFilter(logPipelineConfig.getFilter()));
         break;
       case "tomcat":
-        bind(LogParser.class).toInstance(new TomcatAccessLogParser(logPiplineConfig.getParser()));
-        bind(LogFilter.class).toInstance(new TomcatAccessLogFilter(logPiplineConfig.getFilter()));
+        bind(LogParser.class).toInstance(new TomcatAccessLogParser(logPipelineConfig.getParser()));
+        bind(LogFilter.class).toInstance(new TomcatAccessLogFilter(logPipelineConfig.getFilter()));
         break;
       default:
-        bind(LogParser.class).toInstance(new SpringBootLogParser(logPiplineConfig.getParser()));
-        bind(LogFilter.class).toInstance(new SpringBootLogFilter(logPiplineConfig.getFilter()));
+        bind(LogParser.class).toInstance(new SpringBootLogParser(logPipelineConfig.getParser()));
+        bind(LogFilter.class).toInstance(new SpringBootLogFilter(logPipelineConfig.getFilter()));
     }
     bind(LogExporter.class).toInstance(
         //new ConsoleLogExporter());
-        new HttpLogExporter(logPiplineConfig.getExporter(), agentconfig));
+        new HttpLogExporter(logPipelineConfig.getExporter(), agentconfig));
   }
 
   @Provides
   public MultilineProcessor provideMultilineProcessor(LogParser parser) {
     return new MultilineProcessor(
         parser,
-        logPiplineConfig.getMultiline()
+        logPipelineConfig.getMultiline()
     );
   }
 
@@ -60,7 +60,7 @@ public class LogPiplineComponentRegistry extends AbstractModule {
   public LogTailer provideLogTailer(LogEventListener listener) {
     //todo: multi thread
     return new FileLogTailer(
-        logPiplineConfig.getTailer(),
+        logPipelineConfig.getTailer(),
         listener,
         1
     );

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LogPiplineConfig {
+public class LogPipelineConfig {
 
   private String etag;
   private Integer thNum;

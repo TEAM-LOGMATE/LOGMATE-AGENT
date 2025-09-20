@@ -1,7 +1,7 @@
 package com.logmate.config.puller;
 
 import com.logmate.config.data.AgentConfig;
-import com.logmate.config.data.pipeline.LogPiplineConfig;
+import com.logmate.config.data.pipeline.LogPipelineConfig;
 import com.logmate.config.data.PullerConfig;
 import com.logmate.config.holder.AgentConfigHolder;
 import com.logmate.config.holder.LogPiplineConfigHolder;
@@ -39,35 +39,35 @@ public class ConfigUpdater {
       }
     }
   }
-  private Set<Integer> applyLogPipelineConfigs(List<LogPiplineConfig> newCfgs) {
+  private Set<Integer> applyLogPipelineConfigs(List<LogPipelineConfig> newCfgs) {
     removeMissingTailer(newCfgs);
     Set<Integer> needRestartThreadNum = new HashSet<>();
-    for (LogPiplineConfig responseLogPiplineConfig : newCfgs) {
-      Optional<LogPiplineConfig> opWatcherConfig = LogPiplineConfigHolder.get(
-          responseLogPiplineConfig.getThNum());
+    for (LogPipelineConfig responseLogPipelineConfig : newCfgs) {
+      Optional<LogPipelineConfig> opWatcherConfig = LogPiplineConfigHolder.get(
+          responseLogPipelineConfig.getThNum());
 
       if (opWatcherConfig.isPresent()) {
-        LogPiplineConfig logPiplineConfig = opWatcherConfig.get();
-        if (responseLogPiplineConfig.getEtag().equals(logPiplineConfig.getEtag())) {
+        LogPipelineConfig logPipelineConfig = opWatcherConfig.get();
+        if (responseLogPipelineConfig.getEtag().equals(logPipelineConfig.getEtag())) {
           continue;
         }
 
-        if (LogPiplineConfigHolder.update(responseLogPiplineConfig, logPiplineConfig.getThNum())) {
+        if (LogPiplineConfigHolder.update(responseLogPipelineConfig, logPipelineConfig.getThNum())) {
           log.info("[ConfigUpdater] WatcherConfig #{} changed. Restart required.",
-              logPiplineConfig.getThNum());
-          needRestartThreadNum.add(logPiplineConfig.getThNum());
+              logPipelineConfig.getThNum());
+          needRestartThreadNum.add(logPipelineConfig.getThNum());
         }
       } else {
         // 신규 WatcherConfig 등록 + Tailer 시작
-        boolean inserted = LogPiplineConfigHolder.put(responseLogPiplineConfig,
-            responseLogPiplineConfig.getThNum());
+        boolean inserted = LogPiplineConfigHolder.put(responseLogPipelineConfig,
+            responseLogPipelineConfig.getThNum());
         if (inserted) {
           log.info("[ConfigUpdater] New WatcherConfig #{} added. Starting new tailer.",
-              responseLogPiplineConfig.getThNum());
-          TailerRunManager.start(responseLogPiplineConfig.getThNum());
+              responseLogPipelineConfig.getThNum());
+          TailerRunManager.start(responseLogPipelineConfig.getThNum());
         } else {
           log.error("[ConfigUpdater] Failed to add new WatcherConfig #{}",
-              responseLogPiplineConfig.getThNum());
+              responseLogPipelineConfig.getThNum());
         }
       }
     }
@@ -85,7 +85,7 @@ public class ConfigUpdater {
 
     applyPullerConfig(config.getPullerConfig());
 
-    Set<Integer> needRestartThreadNum = applyLogPipelineConfigs(config.getLogPiplineConfigs());
+    Set<Integer> needRestartThreadNum = applyLogPipelineConfigs(config.getLogPipelineConfigs());
 
     // ETag 업데이트 및 Tailer 재시작
     if (shouldAllRestart) {
@@ -98,9 +98,9 @@ public class ConfigUpdater {
     }
   }
 
-  private static void removeMissingTailer(List<LogPiplineConfig> responseLogPiplineConfigs) {
-    Set<Integer> receivedThreadNums = responseLogPiplineConfigs.stream()
-        .map(LogPiplineConfig::getThNum)
+  private static void removeMissingTailer(List<LogPipelineConfig> responseLogPipelineConfigs) {
+    Set<Integer> receivedThreadNums = responseLogPipelineConfigs.stream()
+        .map(LogPipelineConfig::getThNum)
         .collect(Collectors.toSet());
 
     Set<Integer> existingThreadNums = LogPiplineConfigHolder.getAllThreadNums(); // 내부 Map keySet

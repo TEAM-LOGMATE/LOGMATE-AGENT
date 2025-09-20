@@ -2,7 +2,7 @@ package com.logmate.config.puller.dto;
 
 import com.logmate.config.data.AgentConfig;
 import com.logmate.config.data.PullerConfig;
-import com.logmate.config.data.pipeline.LogPiplineConfig;
+import com.logmate.config.data.pipeline.LogPipelineConfig;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,5 +15,5 @@ public class ConfigDTO {
   private String etag;
   private AgentConfig agentConfig;
   private PullerConfig pullerConfig;
-  private List<LogPiplineConfig> logPiplineConfigs;
+  private List<LogPipelineConfig> logPipelineConfigs;
 }

@@ -1,7 +1,7 @@
 package com.logmate.config.holder;
 
 
-import com.logmate.config.data.pipeline.LogPiplineConfig;
+import com.logmate.config.data.pipeline.LogPipelineConfig;
 import com.logmate.config.validator.ConfigValidator;
 import java.util.Map;
 import java.util.Optional;
@@ -12,31 +12,31 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LogPiplineConfigHolder {
 
-  private static final Map<Integer, LogPiplineConfig> watcherConfigMap = new ConcurrentHashMap<>();
+  private static final Map<Integer, LogPipelineConfig> watcherConfigMap = new ConcurrentHashMap<>();
 
-  public static Optional<LogPiplineConfig> get(Integer thNum) {
+  public static Optional<LogPipelineConfig> get(Integer thNum) {
     if (watcherConfigMap.get(thNum) == null) {
       return Optional.empty();
     }
     return Optional.of(watcherConfigMap.get(thNum));
   }
 
-  public static boolean update(LogPiplineConfig logPiplineConfig, Integer thNum) {
+  public static boolean update(LogPipelineConfig logPipelineConfig, Integer thNum) {
     try {
-      ConfigValidator.validate(logPiplineConfig);
+      ConfigValidator.validate(logPipelineConfig);
     } catch (IllegalArgumentException e) {
       log.error("[LogPiplineConfigHolder] Invalid watcher config: {}", e.getMessage());
       return false;
     }
 
-    watcherConfigMap.put(thNum, logPiplineConfig);
-    log.debug("[LogPiplineConfigHolder] Watcher config updated.{}", logPiplineConfig);
+    watcherConfigMap.put(thNum, logPipelineConfig);
+    log.debug("[LogPiplineConfigHolder] Watcher config updated.{}", logPipelineConfig);
     return true;
   }
 
-  public static boolean put(LogPiplineConfig logPiplineConfig, Integer thNum) {
-    log.debug("[LogPiplineConfigHolder] Watcher config added.{}", logPiplineConfig);
-    return update(logPiplineConfig, thNum);
+  public static boolean put(LogPipelineConfig logPipelineConfig, Integer thNum) {
+    log.debug("[LogPiplineConfigHolder] Watcher config added.{}", logPipelineConfig);
+    return update(logPipelineConfig, thNum);
   }
 
   public static Set<Integer> getAllThreadNums() {

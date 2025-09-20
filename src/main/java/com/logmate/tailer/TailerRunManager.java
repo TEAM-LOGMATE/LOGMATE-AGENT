@@ -1,6 +1,6 @@
 package com.logmate.tailer;
 
-import com.logmate.di.LogPiplineComponentRegistryHolder;
+import com.logmate.di.LogPipelineComponentRegistryHolder;
 import com.logmate.config.holder.AgentConfigHolder;
 import com.logmate.config.holder.LogPiplineConfigHolder;
 import java.util.Map;
@@ -14,8 +14,8 @@ public class TailerRunManager {
 
   public static void start(Integer thNum) {
     LogPiplineConfigHolder.get(thNum).ifPresentOrElse(config -> {
-      LogPiplineComponentRegistryHolder.create(thNum, config, AgentConfigHolder.get());
-      Thread thread = new Thread(LogPiplineComponentRegistryHolder.getTailer(thNum));
+      LogPipelineComponentRegistryHolder.create(thNum, config, AgentConfigHolder.get());
+      Thread thread = new Thread(LogPipelineComponentRegistryHolder.getTailer(thNum));
       tailerThreadMap.put(thNum, thread);
       thread.start();
       log.info("[TailerRunManager] Log tailer for thNum #{} started...", thNum);
@@ -32,8 +32,8 @@ public class TailerRunManager {
 
     oldThread.interrupt();
     LogPiplineConfigHolder.get(thNum).ifPresentOrElse(config -> {
-      LogPiplineComponentRegistryHolder.remake(thNum, config, AgentConfigHolder.get());
-      Thread thread = new Thread(LogPiplineComponentRegistryHolder.getTailer(thNum));
+      LogPipelineComponentRegistryHolder.remake(thNum, config, AgentConfigHolder.get());
+      Thread thread = new Thread(LogPipelineComponentRegistryHolder.getTailer(thNum));
       tailerThreadMap.put(thNum, thread);
       thread.start();
       log.info("[TailerRunManager] Log tailer for thNum {} restarted...", thNum);

@@ -7,7 +7,7 @@ import com.logmate.config.data.pipeline.MultilineConfig;
 import com.logmate.config.data.pipeline.ParserConfig;
 import com.logmate.config.data.PullerConfig;
 import com.logmate.config.data.TailerConfig;
-import com.logmate.config.data.pipeline.LogPiplineConfig;
+import com.logmate.config.data.pipeline.LogPipelineConfig;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -48,7 +48,7 @@ public class ConfigValidator {
     }
   }
 
-  public static void validate(LogPiplineConfig config) {
+  public static void validate(LogPipelineConfig config) {
     if (config == null) {
       throw new IllegalArgumentException("WatcherConfig is null.");
     }
