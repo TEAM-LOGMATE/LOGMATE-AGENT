@@ -25,12 +25,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
     implementation 'com.google.inject:guice:6.0.0'
     implementation 'org.yaml:snakeyaml:2.2'
-
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-
-    //test
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 test {
     useJUnitPlatform()
