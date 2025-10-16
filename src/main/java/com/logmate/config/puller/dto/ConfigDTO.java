@@ -2,6 +2,7 @@ package com.logmate.config.puller.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ConfigDTO {
   private String etag;
   private AgentConfigDto agentConfig;
@@ -40,6 +42,7 @@ public class ConfigDTO {
   @NoArgsConstructor
   @AllArgsConstructor
   @Builder
+  @JsonIgnoreProperties(ignoreUnknown = true)
   public static class LogPipelineConfigDto {
     private String etag;
     private Integer thNum;
@@ -103,9 +106,9 @@ public class ConfigDTO {
     @Builder
     @JsonIgnoreProperties(ignoreUnknown = true) // JSON에 없는 값은 무시
     public static class FilterConfigDto {
-      private List<String> allowedMethods;
-      private List<String> allowedLevels;
-      private List<String> allowedKeywords;
+      private Set<String> allowedMethods;
+      private Set<String> allowedLevels;
+      private Set<String> allowedKeywords;
     }
   }
 

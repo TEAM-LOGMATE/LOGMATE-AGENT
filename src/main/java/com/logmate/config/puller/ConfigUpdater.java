@@ -7,53 +7,60 @@ import com.logmate.config.holder.AgentConfigHolder;
 import com.logmate.config.holder.LogPiplineConfigHolder;
 import com.logmate.config.holder.PullerConfigHolder;
 import com.logmate.config.puller.dto.ConfigDTO;
+import com.logmate.config.puller.dto.ConfigDTO.AgentConfigDto;
+import com.logmate.config.puller.dto.ConfigDTO.LogPipelineConfigDto;
+import com.logmate.config.puller.dto.ConfigDTO.PullerConfigDto;
 import com.logmate.tailer.TailerRunManager;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class ConfigUpdater {
+  private final ConfigConverter converter;
 
-  private boolean applyAgentConfig(AgentConfig newCfg) {
+  private boolean applyAgentConfig(AgentConfigDto newCfgDto) {
     AgentConfig current = AgentConfigHolder.get();
 
-    if (!newCfg.getEtag().equals(current.getEtag())) {
+    if (!newCfgDto.getEtag().equals(current.getEtag())) {
       log.info("[ConfigUpdater] AgentConfig changed. Restart required.");
-      return AgentConfigHolder.update(newCfg);
+      newCfgDto.setAccessToken(current.getAccessToken()); //todo: dto 에서 accessToken 제외
+      return AgentConfigHolder.update(converter.convert(newCfgDto));
     }
     return false;
   }
 
-  private void applyPullerConfig(PullerConfig newCfg) {
+  private void applyPullerConfig(PullerConfigDto newCfgDto) {
     PullerConfig current = PullerConfigHolder.get();
 
-    if (!newCfg.getEtag().equals(current.getEtag())) {
-      if (PullerConfigHolder.update(newCfg)) {
+    if (!newCfgDto.getEtag().equals(current.getEtag())) {
+      if (PullerConfigHolder.update(converter.convert(newCfgDto))) {
         log.info("[ConfigUpdater] PullerConfig changed.");
       }
     }
   }
-  private Set<Integer> applyLogPipelineConfigs(List<LogPipelineConfig> newCfgs) {
+  private Set<Integer> applyLogPipelineConfigs(List<LogPipelineConfigDto> newCfgsDto) {
+    List<LogPipelineConfig> newCfgs = converter.convert(newCfgsDto);
+
     removeMissingTailer(newCfgs);
     Set<Integer> needRestartThreadNum = new HashSet<>();
     for (LogPipelineConfig responseLogPipelineConfig : newCfgs) {
-      Optional<LogPipelineConfig> opWatcherConfig = LogPiplineConfigHolder.get(
+      Optional<LogPipelineConfig> opLogPipelineConfig = LogPiplineConfigHolder.get(
           responseLogPipelineConfig.getThNum());
 
-      if (opWatcherConfig.isPresent()) {
-        LogPipelineConfig logPipelineConfig = opWatcherConfig.get();
+      if (opLogPipelineConfig.isPresent()) {
+        LogPipelineConfig logPipelineConfig = opLogPipelineConfig.get();
         if (responseLogPipelineConfig.getEtag().equals(logPipelineConfig.getEtag())) {
           continue;
         }
 
         if (LogPiplineConfigHolder.update(responseLogPipelineConfig, logPipelineConfig.getThNum())) {
-          log.info("[ConfigUpdater] WatcherConfig #{} changed. Restart required.",
+          log.info("[ConfigUpdater] PipelineConfig #{} changed. Restart required.",
               logPipelineConfig.getThNum());
           needRestartThreadNum.add(logPipelineConfig.getThNum());
         }
