@@ -1,4 +1,4 @@
-package com.logmate.config;
+package com.logmate.config.data.pipeline;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

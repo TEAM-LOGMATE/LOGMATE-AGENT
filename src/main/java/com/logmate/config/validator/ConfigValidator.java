@@ -1,13 +1,13 @@
 package com.logmate.config.validator;
 
-import com.logmate.config.AgentConfig;
-import com.logmate.config.ExporterConfig;
-import com.logmate.config.FilterConfig;
-import com.logmate.config.MultilineConfig;
-import com.logmate.config.ParserConfig;
-import com.logmate.config.PullerConfig;
-import com.logmate.config.TailerConfig;
-import com.logmate.config.LogPiplineConfig;
+import com.logmate.config.data.AgentConfig;
+import com.logmate.config.data.pipeline.ExporterConfig;
+import com.logmate.config.data.pipeline.FilterConfig;
+import com.logmate.config.data.pipeline.MultilineConfig;
+import com.logmate.config.data.pipeline.ParserConfig;
+import com.logmate.config.data.PullerConfig;
+import com.logmate.config.data.TailerConfig;
+import com.logmate.config.data.pipeline.LogPipelineConfig;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -48,7 +48,7 @@ public class ConfigValidator {
     }
   }
 
-  public static void validate(LogPiplineConfig config) {
+  public static void validate(LogPipelineConfig config) {
     if (config == null) {
       throw new IllegalArgumentException("WatcherConfig is null.");
     }
@@ -108,13 +108,6 @@ public class ConfigValidator {
 
     if (isNullOrBlank(parser.getType())) {
       throw new IllegalArgumentException("parser.type must not be empty.");
-    }
-
-    ParserConfig.ParserDetailConfig detail = parser.getConfig();
-    if (detail == null || isNullOrBlank(detail.getTimestampPattern()) || isNullOrBlank(
-        detail.getTimezone())) {
-      throw new IllegalArgumentException(
-          "parser.config.timestampPattern and timezone must not be empty.");
     }
   }
 

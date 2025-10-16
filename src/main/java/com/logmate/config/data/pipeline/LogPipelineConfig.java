@@ -1,5 +1,6 @@
-package com.logmate.config;
+package com.logmate.config.data.pipeline;
 
+import com.logmate.config.data.TailerConfig;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LogPiplineConfig {
+public class LogPipelineConfig {
 
   private String etag;
   private Integer thNum;
@@ -16,4 +17,5 @@ public class LogPiplineConfig {
   private ExporterConfig exporter;
   private ParserConfig parser;
   private FilterConfig filter;
+  private FallbackStorageConfig fallbackStorage;
 }

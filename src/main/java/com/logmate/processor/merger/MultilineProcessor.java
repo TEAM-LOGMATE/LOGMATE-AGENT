@@ -1,11 +1,13 @@
 package com.logmate.processor.merger;
 
-import com.logmate.config.MultilineConfig;
+import com.logmate.config.data.pipeline.MultilineConfig;
 import com.logmate.processor.parser.LogParser;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 public class MultilineProcessor {
 
@@ -14,7 +16,10 @@ public class MultilineProcessor {
   List<String> multilineBuffer = new ArrayList<>();
 
   public String[] process(String[] rawLines) {
+    log.debug("[MultilineProcessor] process called with {} lines", rawLines.length);
+
     if (!config.isEnabled()) {
+      log.debug("[MultilineProcessor] multiline processing disabled. Return raw lines.");
       return rawLines;
     }
 
@@ -44,7 +49,7 @@ public class MultilineProcessor {
   }
 
   private String flushBuffer() {
-    String merged = "[MERGED-STACKTRACE]\n" + String.join("\n", multilineBuffer);
+    String merged = "[MERGED]\n" + String.join("\n", multilineBuffer);
     multilineBuffer.clear();
     return merged;
   }

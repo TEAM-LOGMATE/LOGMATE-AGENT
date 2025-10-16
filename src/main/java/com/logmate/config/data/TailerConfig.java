@@ -1,7 +1,6 @@
-package com.logmate.config;
+package com.logmate.config.data;
 
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

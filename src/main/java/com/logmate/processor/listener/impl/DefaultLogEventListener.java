@@ -2,6 +2,7 @@ package com.logmate.processor.listener.impl;
 
 
 import com.logmate.processor.exporter.LogExporter;
+import com.logmate.processor.fallback.FallbackStorage;
 import com.logmate.processor.filter.LogFilter;
 import com.logmate.processor.listener.LogEventListener;
 import com.logmate.processor.merger.MultilineProcessor;
@@ -10,7 +11,9 @@ import java.util.List;
 import com.logmate.processor.parser.LogParser;
 import com.logmate.processor.parser.ParsedLogData;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 public class DefaultLogEventListener implements LogEventListener {
 
@@ -21,6 +24,7 @@ public class DefaultLogEventListener implements LogEventListener {
   // 로그 익스포터 인터페이스
   private final LogExporter logExporter;
   private final MultilineProcessor multilineProcessor;
+  private final FallbackStorage fallbackStorage;
 
   /**
    * 1초마다 받아 온 로그들을 한 줄씩 parser -> filter 를 통과시켜 버퍼링해둔다. 이후 exporter 로 버퍼링된 로그들을 외부로 전송한다.
@@ -29,8 +33,12 @@ public class DefaultLogEventListener implements LogEventListener {
    */
   @Override
   public void onLogReceive(String[] lines) {
+    log.debug("[onLogReceive] onLogReceive called line length: {}", lines.length);
+
     // export 할 로그들의 저장소(버퍼)
     List<ParsedLogData> exportLogs = new ArrayList<>();
+    
+    // multiline 병합이 필요할 경우 병합
     lines = multilineProcessor.process(lines);
 
     // 한 줄씩 parser 와 filter 를 통과시킨다.
@@ -40,9 +48,14 @@ public class DefaultLogEventListener implements LogEventListener {
         exportLogs.add(parse); // filter 에서 처리가 accept 되었을 경우 버퍼에 추가
       }
     }
+    log.debug("[onLogReceive] onLogReceive processed logs: {}", exportLogs.size());
+    exportLogs.addAll(fallbackStorage.loadAll());
+    log.debug("[onLogReceive] onLogReceive fallback logs: {}", exportLogs.size());
     // export 로그 버퍼가 비어있지 않을 경우 버퍼 flush (export)
     if (!exportLogs.isEmpty()) {
-      logExporter.export(exportLogs);
+      List<ParsedLogData> fallback = logExporter.export(exportLogs);
+      fallbackStorage.clear();
+      fallbackStorage.save(fallback);
     }
   }
 }

@@ -1,15 +1,15 @@
-package com.logmate.config;
+package com.logmate.config.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class PullerConfig {
+@NoArgsConstructor
+public class AgentConfig {
 
-  private String pullURL;
-  private int intervalSec;
+  private String agentId;
+  private String accessToken;
   private String etag;
 }

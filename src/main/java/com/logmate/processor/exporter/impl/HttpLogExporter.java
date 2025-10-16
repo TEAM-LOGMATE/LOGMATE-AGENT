@@ -3,9 +3,10 @@ package com.logmate.processor.exporter.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.logmate.config.AgentConfig;
-import com.logmate.config.ExporterConfig;
+import com.logmate.config.data.AgentConfig;
+import com.logmate.config.data.pipeline.ExporterConfig;
 import com.logmate.processor.exporter.LogExporter;
+import com.logmate.processor.exporter.util.PayloadBatcher;
 import com.logmate.processor.parser.ParsedLogData;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 import lombok.RequiredArgsConstructor;
@@ -22,34 +24,60 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class HttpLogExporter implements LogExporter {
 
-  private final ExporterConfig exporterConfig;
-  private final AgentConfig agentConfig;
-  private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule()).disable(
-      SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+  private final PayloadBatcher batcher;
+  private final boolean compressEnabled;
+  private final int retryIntervalSec;
+  private final int maxRetryCount;
+  private final String pushUrl;
+  private final String accessToken;
+  private final ObjectMapper mapper = new ObjectMapper()
+      .registerModule(new JavaTimeModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+  public HttpLogExporter(ExporterConfig exporterConfig, AgentConfig agentConfig) {
+    this.compressEnabled = exporterConfig.getCompressEnabled();
+    this.retryIntervalSec = exporterConfig.getRetryIntervalSec();
+    this.maxRetryCount = exporterConfig.getMaxRetryCount();
+    this.pushUrl = exporterConfig.getPushURL();
+    this.accessToken = agentConfig.getAccessToken();
+    this.batcher = new PayloadBatcher(mapper, 1024*1024);
+  }
 
   @Override
-  public void export(List<ParsedLogData> logDataList) {
+  public List<ParsedLogData> export(List<ParsedLogData> logDataList) {
+    List<ParsedLogData> exportFailLogDataList = new ArrayList<>();
+    for (List<ParsedLogData> batch : batcher.split(logDataList)) {
+      if (!sendBatch(batch)) {
+        exportFailLogDataList.addAll(batch);
+      }
+    }
+    return exportFailLogDataList;
+  }
+
+  private boolean sendBatch(List<ParsedLogData> logDataList) {
     String jsonBody;
     try {
       jsonBody = mapper.writeValueAsString(logDataList);
     } catch (IOException e) {
-      log.error("Failed to serialize log data", e);
-      return;
+      log.error("[export] Failed to serialize log data", e);
+      return false;
     }
 
-    byte[] payload = exporterConfig.getCompressEnabled()
+    byte[] payload = compressEnabled
         ? compress(jsonBody)
         : jsonBody.getBytes(StandardCharsets.UTF_8);
 
     int attempt = 0;
-    while (attempt <= exporterConfig.getMaxRetryCount()) {
+    boolean isSuccess = false;
+    while (attempt <= maxRetryCount) {
+      HttpURLConnection conn = null;
       try {
-        HttpURLConnection conn = (HttpURLConnection) new URL(exporterConfig.getPushURL()).openConnection();
+        conn = (HttpURLConnection) new URL(pushUrl).openConnection();
         conn.setRequestMethod("POST");
         conn.setDoOutput(true);
-        conn.setRequestProperty("Authorization", "Bearer " + agentConfig.getAccessToken());
+        conn.setRequestProperty("Authorization", "Bearer " + accessToken);
         conn.setRequestProperty("Content-Type", "application/json");
-        if (exporterConfig.getCompressEnabled()) {
+        if (compressEnabled) {
           conn.setRequestProperty("Content-Encoding", "gzip");
         }
 
@@ -58,23 +86,28 @@ public class HttpLogExporter implements LogExporter {
         }
 
         int responseCode = conn.getResponseCode();
-        log.info("log push response code: {}", responseCode);
+        log.info("[export] log push response code: {}", responseCode);
         if (responseCode >= 200 && responseCode < 300) {
-          log.debug("log push succeeded");
+          log.info("[export] log push succeeded");
+          isSuccess = true;
           break; // 성공
         }
-        log.debug("log push failed");
-        conn.disconnect();
+        log.debug("[export] log push failed");
         attempt++;
-        Thread.sleep(exporterConfig.getRetryIntervalSec() * 1000L);
+        Thread.sleep(retryIntervalSec * 1000L);
       } catch (IOException | InterruptedException e) {
         attempt++;
-        if (attempt > exporterConfig.getMaxRetryCount()) {
-          log.error("Failed to push logs after retries", e);
+        if (attempt > maxRetryCount) {
+          log.info("[export] Failed to push logs after {} retries",maxRetryCount, e);
+        }
+      }
+      finally {
+        if (conn != null) {
+          conn.disconnect();
         }
       }
     }
-    log.error("Failed to push logs after retries");
+    return isSuccess;
   }
 
   private byte[] compress(String input) {
@@ -84,7 +117,7 @@ public class HttpLogExporter implements LogExporter {
       gzipStream.close();
       return byteStream.toByteArray();
     } catch (IOException e) {
-      throw new RuntimeException("Failed to compress log data", e);
+      throw new RuntimeException("[export] Failed to compress log data", e);
     }
   }
 }

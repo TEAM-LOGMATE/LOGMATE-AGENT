@@ -1,50 +1,30 @@
 package com.logmate.processor.parser.impl.spring;
 
 
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.Instant;
 import com.logmate.processor.parser.ParsedLogData;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
+@AllArgsConstructor
+@ToString
+@NoArgsConstructor
 public class SpringBootParsedLogData implements ParsedLogData {
-
+  @JsonProperty("formatCorrect")
   private boolean isFormatCorrect;
-  private LocalDateTime timestamp;
+  private Instant timestamp;
   private String level;
   private String thread;
   private String logger;
   private String message;
-  private String tag;
-
-  public SpringBootParsedLogData(boolean isFormatCorrect, LocalDateTime timestamp, String level,
-      String thread,
-      String logger,
-      String message,
-      String tag) {
-    this.isFormatCorrect = isFormatCorrect;
-    this.timestamp = timestamp;
-    this.level = level;
-    this.thread = thread;
-    this.logger = logger;
-    this.message = message;
-    this.tag = tag;
-  }
+  private String userTimezone;
 
   @Override
   public String getMessage() {
     return message;
-  }
-
-  @Override
-  public String toString() {
-    return "{" +
-        "\"isFormatCorrect\":" + isFormatCorrect +
-        ",\"timestamp\":\"" + timestamp + '\"' +
-        ",\"level\":\"" + level + '\"' +
-        ",\"thread\":\"" + thread + '\"' +
-        ",\"logger\":\"" + logger + '\"' +
-        ",\"message\":\"" + message + '\"' +
-        ",\"tag\":\"" + tag + '\"' +
-        '}';
   }
 }

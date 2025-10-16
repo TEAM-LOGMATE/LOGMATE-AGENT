@@ -20,17 +20,12 @@ repositories {
 
 dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
-    implementation 'org.slf4j:slf4j-simple:2.0.7'
+    implementation 'ch.qos.logback:logback-classic:1.4.14'
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
     implementation 'com.google.inject:guice:6.0.0'
     implementation 'org.yaml:snakeyaml:2.2'
-
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-
-    //test
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 test {
     useJUnitPlatform()

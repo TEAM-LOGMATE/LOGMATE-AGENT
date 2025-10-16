@@ -1,4 +1,4 @@
-package com.logmate.config;
+package com.logmate.bootstrap.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AgentConfig {
-
-  private String agentId;
-  private String accessToken;
-  private String etag;
+public class LoginRequest {
+  private String email;
+  private String password;
 }

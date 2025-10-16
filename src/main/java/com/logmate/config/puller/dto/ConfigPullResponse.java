@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class AuthenticationRequestDTO {
-  String agentId;
+public class ConfigPullResponse {
+  private ConfigDTO body;
+  private Integer status;
 }

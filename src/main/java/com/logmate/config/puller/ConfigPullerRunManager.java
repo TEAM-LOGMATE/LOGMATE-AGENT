@@ -1,23 +1,22 @@
 package com.logmate.config.puller;
 
+import com.logmate.bootstrap.args.AgentArguments;
+import com.logmate.bootstrap.auth.AgentAuthenticator;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@NoArgsConstructor
 public class ConfigPullerRunManager {
 
-  private static Thread pullerThread;
+  private Thread pullerThread;
 
-  public static void start() {
-    pullerThread = new Thread(new ConfigPuller());
+  public void start(AgentAuthenticator agentAuthenticator, AgentArguments agentArguments) {
+    pullerThread = new Thread(
+        new ConfigPuller(new ConfigPullClient(), new ConfigUpdater(new ConfigConverter()),
+            agentAuthenticator, agentArguments)
+    );
     pullerThread.start();
     log.info("[ConfigPullerRunManager] configuration puller started...");
-  }
-
-  public static void stop() {
-    if (pullerThread != null) {
-      pullerThread.interrupt();
-      pullerThread = null;
-      log.info("[ConfigPullerRunManager] configuration puller stopped.");
-    }
   }
 }

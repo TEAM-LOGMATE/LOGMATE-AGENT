@@ -1,6 +1,6 @@
 package com.logmate.processor.filter.impl;
 
-import com.logmate.config.FilterConfig;
+import com.logmate.config.data.pipeline.FilterConfig;
 import com.logmate.processor.filter.LogFilter;
 import com.logmate.processor.parser.ParsedLogData;
 import com.logmate.processor.parser.impl.web.TomcatAccessLogParsedLogData;
@@ -11,13 +11,10 @@ public class TomcatAccessLogFilter implements LogFilter {
 
   // Web 로그 전용 필터 항목
   private final Set<String> allowedMethods;
-  private final Set<Integer> allowedStatusCodes;
-  private final Set<String> urlPrefix;
+
 
   public TomcatAccessLogFilter(FilterConfig config) {
     this.allowedMethods = config.getAllowedMethods();
-    this.allowedStatusCodes = config.getAllowedStatusCodes();
-    this.urlPrefix = config.getUrlPrefix();
   }
 
   @Override
@@ -26,18 +23,16 @@ public class TomcatAccessLogFilter implements LogFilter {
       return false;
     }
 
+    // 파싱이 실패한 로그 라인 (ex. 스택트레이스, 멀티라인 로그)은
+    // 사용자 설정과 상관없이 무조건 accept 처리.
+    // → 디버깅 필수 정보가 손실되지 않도록 Fail-safe 보장.
+    if (!webLog.isFormatCorrect()) {
+      return true;
+    }
+
     // 요청 메서드 필터링
-    if (!allowedMethods.isEmpty() && !allowedMethods.contains(webLog.getMethod())) return false;
-
-    // 상태 코드 필터링
-    if (!allowedStatusCodes.isEmpty() && !allowedStatusCodes.contains(webLog.getStatusCode())) return false;
-
-    // URL prefix 필터링
-    if (!urlPrefix.isEmpty()) {
-      Optional<String> any = urlPrefix.stream()
-          .filter(url -> webLog.getUrl().startsWith(url))
-          .findAny();
-      if (any.isEmpty()) return false;
+    if (!allowedMethods.isEmpty() && !allowedMethods.contains(webLog.getMethod().toUpperCase())) {
+      return false;
     }
 
     return true;

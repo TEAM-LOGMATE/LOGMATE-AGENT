@@ -1,4 +1,4 @@
-package com.logmate.config;
+package com.logmate.config.data.pipeline;
 
 
 import lombok.AllArgsConstructor;
@@ -18,7 +18,6 @@ public class ParserConfig {
   @AllArgsConstructor
   public static class ParserDetailConfig {
 
-    private String timestampPattern;
     private String timezone;
   }
 }
