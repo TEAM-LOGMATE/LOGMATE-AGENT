@@ -23,8 +23,17 @@ public class TomcatAccessLogFilter implements LogFilter {
       return false;
     }
 
+    // 파싱이 실패한 로그 라인 (ex. 스택트레이스, 멀티라인 로그)은
+    // 사용자 설정과 상관없이 무조건 accept 처리.
+    // → 디버깅 필수 정보가 손실되지 않도록 Fail-safe 보장.
+    if (!webLog.isFormatCorrect()) {
+      return true;
+    }
+
     // 요청 메서드 필터링
-    if (!allowedMethods.isEmpty() && !allowedMethods.contains(webLog.getMethod())) return false;
+    if (!allowedMethods.isEmpty() && !allowedMethods.contains(webLog.getMethod().toUpperCase())) {
+      return false;
+    }
 
     return true;
   }
