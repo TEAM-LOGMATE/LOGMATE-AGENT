@@ -6,13 +6,18 @@ import com.logmate.config.data.AgentConfig;
 import com.logmate.config.data.PullerConfig;
 import com.logmate.config.holder.AgentConfigHolder;
 import com.logmate.config.holder.PullerConfigHolder;
-import lombok.RequiredArgsConstructor;
+import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequiredArgsConstructor
 public class ConfigInitializer {
+
   private final ConfigLoader configLoader;
+
+  @Inject
+  public ConfigInitializer(ConfigLoader configLoader) {
+    this.configLoader = configLoader;
+  }
 
   public void init(AgentArguments agentArguments) {
     log.info("[ConfigInitializer] Configuration initialize started.");
