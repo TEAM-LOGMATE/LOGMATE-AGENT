@@ -2,37 +2,45 @@ package com.logmate.bootstrap.args;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ArgsExtractor {
 
-  private static final String ARG_KEY = "agentId";
-  private static final String ARG_PREFIX = "--" + ARG_KEY + "=";
+  private static final List<String> REQUIRED_KEYS = List.of("agentId", "email", "password");
+  private static final String PREFIX = "--";
 
   public AgentArguments extract(String[] args) {
-    List<String> matches = Arrays.stream(args)
-        .filter(arg -> arg.startsWith(ARG_PREFIX))
-        .toList();
 
-    validate(matches);
+    // args → Map<String, String> 형태로 변환
+    Map<String, String> argMap = Arrays.stream(args)
+        .filter(arg -> arg.startsWith(PREFIX))
+        .map(arg -> arg.substring(2).split("=", 2))
+        .filter(pair -> pair.length == 2)
+        .collect(Collectors.toMap(pair -> pair[0], pair -> pair[1], (a, b) -> b));
 
-    String agentId = matches.get(0).substring(ARG_PREFIX.length());
-    log.info("[ArgsExtractor] Resolved agentId={}", agentId);
 
-    return new AgentArguments(agentId);
+    String agentId = argMap.get("agentId");
+    String email = argMap.get("email");
+    String password = argMap.get("password");
+
+    log.info("[ArgsExtractor] Resolved agentId={}, email={}, password=****", agentId, email);
+
+    return new AgentArguments(agentId, email, password);
   }
 
-  private void validate(List<String> matches) {
-    if (matches.isEmpty()) {
-      log.error("[ArgsExtractor] Missing required argument: {}", ARG_PREFIX + "value");
-      throw new IllegalArgumentException("Missing required argument: " + ARG_PREFIX + "value");
-    }
-
-    if (matches.size() > 1) {
-      log.error("[ArgsExtractor] Duplicate argument detected: {} ({} occurrences)",
-          ARG_PREFIX + "value", matches.size());
-      throw new IllegalArgumentException("Invalid argument: duplicate " + ARG_PREFIX + "value");
+  private void validate(Map<String, String> argMap) {
+    // 필수 인자 검증
+    for (String key : REQUIRED_KEYS) {
+      if (argMap.get(key).isBlank()) {
+        log.error("[ArgsExtractor] Missing required argument: --{}=<value>", key);
+        throw new IllegalArgumentException("Missing required argument: --" + key + "=<value>");
+      } else if (!argMap.containsKey(key)) {
+        log.error("[ArgsExtractor] Unknown argument key: --{}=<value>", key);
+        throw new IllegalArgumentException("Unknown argument key: --" + key + "=<value>");
+      }
     }
   }
 }
