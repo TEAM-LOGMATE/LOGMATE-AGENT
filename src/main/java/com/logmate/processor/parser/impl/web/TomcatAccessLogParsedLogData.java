@@ -1,20 +1,23 @@
 package com.logmate.processor.parser.impl.web;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.logmate.processor.parser.ParsedLogData;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @AllArgsConstructor
+@ToString
+@NoArgsConstructor
 public class TomcatAccessLogParsedLogData implements ParsedLogData {
   @JsonProperty("formatCorrect")
   private boolean isFormatCorrect;
   private String ip;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-  private LocalDateTime timestamp;
+  private Instant timestamp;
   private String method;
   private String url;
   private String protocol;
@@ -23,8 +26,10 @@ public class TomcatAccessLogParsedLogData implements ParsedLogData {
   private String referer;
   private String userAgent;
   private String extra;
+  private String userTimezone;
 
   @Override
+  @JsonIgnore
   public String getMessage() {
     return String.format(
         "%s -- [%s] \"%s %s %s\" %d %d \"%s\" \"%s\" %s",
@@ -39,22 +44,5 @@ public class TomcatAccessLogParsedLogData implements ParsedLogData {
         userAgent,
         extra
     );
-  }
-
-  @Override
-  public String toString() {
-    return "{" +
-        "\"isFormatCorrect\":" + isFormatCorrect +
-        ",\"ip\":\"" + ip + '\"' +
-        ",\"timestamp\":\"" + timestamp + '\"' +
-        ",\"method\":\"" + method + '\"' +
-        ",\"url\":\"" + url + '\"' +
-        ",\"protocol\":\"" + protocol + '\"' +
-        ",\"statusCode\":" + statusCode +
-        ",\"responseSize\":" + responseSize +
-        ",\"referer\":\"" + referer + '\"' +
-        ",\"userAgent\":\"" + userAgent + '\"' +
-        ",\"extra\":\"" + extra + '\"' +
-        '}';
   }
 }
