@@ -109,13 +109,6 @@ public class ConfigValidator {
     if (isNullOrBlank(parser.getType())) {
       throw new IllegalArgumentException("parser.type must not be empty.");
     }
-
-    ParserConfig.ParserDetailConfig detail = parser.getConfig();
-    if (detail == null || isNullOrBlank(detail.getTimestampPattern()) || isNullOrBlank(
-        detail.getTimezone())) {
-      throw new IllegalArgumentException(
-          "parser.config.timestampPattern and timezone must not be empty.");
-    }
   }
 
   private static void validateFilter(FilterConfig filter) {
