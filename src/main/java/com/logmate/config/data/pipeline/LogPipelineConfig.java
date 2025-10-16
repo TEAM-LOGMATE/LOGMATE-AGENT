@@ -17,4 +17,5 @@ public class LogPipelineConfig {
   private ExporterConfig exporter;
   private ParserConfig parser;
   private FilterConfig filter;
+  private FallbackStorageConfig fallbackStorage;
 }
