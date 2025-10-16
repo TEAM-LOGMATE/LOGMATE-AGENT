@@ -8,9 +8,10 @@ import com.logmate.processor.parser.ParsedLogData;
 public class ConsoleLogExporter implements LogExporter {
 
   @Override
-  public void export(List<ParsedLogData> logDataList) {
+  public List<ParsedLogData> export(List<ParsedLogData> logDataList) {
     for (ParsedLogData exportData : logDataList) {
       System.out.println("Exported Log: " + exportData);
     }
+    return logDataList;
   }
 }
