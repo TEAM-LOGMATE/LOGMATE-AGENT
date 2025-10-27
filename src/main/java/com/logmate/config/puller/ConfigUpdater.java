@@ -37,7 +37,8 @@ public class ConfigUpdater {
 
   private void applyPullerConfig(PullerConfigDto newCfgDto) {
     PullerConfig current = PullerConfigHolder.get();
-
+    //pull URL 유지
+    newCfgDto.setPullURL(current.getPullURL());
     if (!newCfgDto.getEtag().equals(current.getEtag())) {
       if (PullerConfigHolder.update(converter.convert(newCfgDto))) {
         log.info("[ConfigUpdater] PullerConfig changed.");
