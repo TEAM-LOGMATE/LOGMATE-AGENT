@@ -69,7 +69,7 @@ public class ConfigValidator {
       throw new IllegalArgumentException("tailer.filePaths must be a valid file path list.");
     }
 
-    if (tailer.getReadIntervalMs() <= 500) {
+    if (tailer.getReadIntervalMs() < 500) {
       throw new IllegalArgumentException("tailer.readIntervalMs must be greater than 500 Ms.");
     }
   }
