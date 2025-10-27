@@ -38,7 +38,7 @@ public class ConfigPuller implements Runnable {
       PullerConfig pullerConfig = PullerConfigHolder.get();
 
       // puller url (API Server)
-      String baseUrl = pullerConfig.getPullURL();
+      String baseUrl = pullerConfig.getPullURL() + "/api/config";
       String query = String.format(
           "agentId=%s&etag=%s",
           agentConfig.getAgentId(),

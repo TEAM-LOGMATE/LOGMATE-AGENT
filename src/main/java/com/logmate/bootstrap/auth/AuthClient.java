@@ -3,7 +3,6 @@ package com.logmate.bootstrap.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.logmate.config.holder.PullerConfigHolder;
-import com.logmate.config.puller.dto.ConfigDTO.PullerConfigDto;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -27,7 +26,7 @@ public class AuthClient {
 
   public Optional<LoginResponse> login(String email, String password) {
     String url = PullerConfigHolder.get()
-        .getPullURL() + "/users/login";
+        .getPullURL() + "/api/users/login";
 
     try {
       LoginRequest request = new LoginRequest(email, password);
