@@ -73,7 +73,7 @@ public class FileFallbackStorage implements FallbackStorage {
   @Override
   public void clear() {
     if (file.exists() && file.delete()) {
-      log.info("[clear] Cleared {}", file.getAbsolutePath());
+      log.debug("[clear] Cleared {}", file.getAbsolutePath());
     }
   }
 }

@@ -121,7 +121,10 @@ public class FileLogTailer implements LogTailer {
         savePositionToFile(lastKnownPosition); // 변경된 포지션 정보 메타데이터 파일에 저장
         Thread.sleep(config.getReadIntervalMs()); // 1초 간격으로 체크
       }
-    } catch (Exception e) {
+    }
+    catch (InterruptedException e) {
+    }
+    catch (Exception e) {
       e.printStackTrace();
     }
   }
