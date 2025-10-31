@@ -57,11 +57,10 @@ public class LogPipelineComponentRegistry extends AbstractModule {
 
   @Provides
   public LogTailer provideLogTailer(LogEventListener listener) {
-    //todo: multi thread
     return new FileLogTailer(
         logPipelineConfig.getTailer(),
         listener,
-        1
+        logPipelineConfig.getThNum()
     );
   }
 
